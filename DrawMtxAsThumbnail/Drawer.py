@@ -125,8 +125,10 @@ class Drawer:
             ticks=self.yticks,
             labels=[int(i * self.col_block_sz) for i in self.yticks[:-1]] + [self.coo_shape[1]]
         )
-        plt.tick_params(axis='x', colors='white')
-        plt.tick_params(axis='y', colors='white')
+        # plt.tick_params(axis='x', colors='white')
+        # plt.tick_params(axis='y', colors='white')
+        plt.tick_params(axis='x')
+        plt.tick_params(axis='y')
         plt.colorbar()
         fig.savefig(self.img_path.format(suffix), format='svg', transparent=True)
         plt.close(fig)
