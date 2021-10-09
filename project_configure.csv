@@ -1,0 +1,6 @@
+compile_tool,
+compile_filename,main.py
+executable_filename,python3 main.py
+input_file,dist/input.txt
+template_root,template/
+server_target,,
