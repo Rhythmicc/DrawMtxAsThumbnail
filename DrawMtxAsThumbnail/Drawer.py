@@ -1,5 +1,6 @@
 from . import *
 
+
 class Drawer:
     def __init__(self, filepath: str, has_aver: bool, force_update: bool = False, set_log_times: int = 2, set_mat_size: int = 200):
         self.filepath = filepath
@@ -16,8 +17,9 @@ class Drawer:
             self.coo_data, self.coo_rows, self.coo_cols, \
             self.raw_mat, self.mat, self.div, \
             self.row_size, self.col_size, \
-            self.row_block_sz, self.col_block_sz \
-            = None, None, None, None, None, None, None, None, None, None, None, None, None
+            self.row_block_sz, self.col_block_sz, \
+            self.xticks, self.yticks \
+            = None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
         self.absVal = 1
 
     def loadMtx(self, st=None):
@@ -29,18 +31,22 @@ class Drawer:
 
         self.coo_shape = self.mtx.shape
         if self.coo_shape[0] > self.coo_shape[1]:
+            rate = self.coo_shape[1] / self.coo_shape[0]
             self.row_size = self.matSize
             self.row_block_sz = int(math.ceil(self.coo_shape[0] / self.row_size))
-            self.col_size = int(math.ceil(self.matSize * (self.coo_shape[1] / self.coo_shape[0])))
+            self.col_size = int(math.ceil(self.matSize * rate))
             self.col_block_sz = int(math.ceil(self.coo_shape[1] / self.col_size))
+            self.yticks = np.linspace(0, self.row_size, 4)
+            self.xticks = np.linspace(0, self.col_size, my_round(4 * rate))
         else:
+            rate = self.coo_shape[0] / self.coo_shape[1]
             self.col_size = self.matSize
             self.col_block_sz = int(math.ceil(self.coo_shape[1] / self.col_size))
-            self.row_size =  int(math.ceil(self.matSize * (self.coo_shape[0] / self.coo_shape[1])))
+            self.row_size =  int(math.ceil(self.matSize * rate))
             self.row_block_sz = int(math.ceil(self.coo_shape[0] / self.col_size))
+            self.xticks = np.linspace(0, self.col_size, 4)
+            self.yticks = np.linspace(0, self.row_size, my_round(4 * rate))
 
-        self.xticks = np.linspace(0, self.col_size, 4)
-        self.yticks = np.linspace(0, self.row_size, 4)
         self.coo_data = self.mtx.data
         self.coo_rows = self.mtx.row // self.row_block_sz
         self.coo_cols = self.mtx.col // self.col_block_sz
@@ -119,11 +125,11 @@ class Drawer:
         )
         plt.xticks(
             ticks=self.xticks,
-            labels=[int(i * self.row_block_sz) for i in self.xticks[:-1]] + [self.coo_shape[0]],
+            labels=[int(i * self.row_block_sz) for i in self.xticks[:-1]] + [self.coo_shape[1]],
         )
         plt.yticks(
             ticks=self.yticks,
-            labels=[int(i * self.col_block_sz) for i in self.yticks[:-1]] + [self.coo_shape[1]]
+            labels=[int(i * self.col_block_sz) for i in self.yticks[:-1]] + [self.coo_shape[0]]
         )
         # plt.tick_params(axis='x', colors='white')
         # plt.tick_params(axis='y', colors='white')
