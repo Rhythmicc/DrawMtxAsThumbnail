@@ -127,8 +127,6 @@ class Drawer:
         )
         # plt.tick_params(axis='x', colors='white')
         # plt.tick_params(axis='y', colors='white')
-        plt.tick_params(axis='x')
-        plt.tick_params(axis='y')
         plt.colorbar()
         fig.savefig(self.img_path.format(suffix), format='svg', transparent=True)
         plt.close(fig)
