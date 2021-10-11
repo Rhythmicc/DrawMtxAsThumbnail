@@ -32,6 +32,10 @@ qrun aver abs log real -one 2.mtx --set-log-times 0 --force # 一次性绘制2.m
 qrun aver abs log --force # 绘制当前目录及子目录下的全部mtx文件的三种图，强制替换
 ```
 
+### 特殊说明
+
+子矩阵划分方式：当行列不相等时，较大的属性被分为`matSize`块，较小的属性为`rate * matSize`块；其中`rate`为$ min(m,n)/max(m,n) $
+
 ## 样例
 
 |     ![](./dist/ash85_aver.svg)<br />平均值     |    ![](./dist/ash85_real.svg)<br />不处理    |
