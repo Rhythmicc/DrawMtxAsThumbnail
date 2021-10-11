@@ -1,6 +1,7 @@
 from . import *
 import inspect
 from inspect import isfunction
+from typing import Callable, Any
 
 
 class Drawer:
@@ -46,13 +47,16 @@ class Drawer:
 
         col_block_sz: 划分的子矩阵的列数
         """
-        def wrapper(func):
+        def wrapper(func: Callable[[Any], float]):
             if not isfunction(func):
                 raise TypeError("Algorithm Wrapper should wrap a function!")
             func_analyser = inspect.signature(func)
             func_name = func.__name__.strip('_')
             if func_name in Drawer.algorithm_func_table:
                 raise Exception(f"Algorithm '{func_name}' already exists!")
+            for arg in func_analyser.parameters.values():
+                if arg.name not in Drawer.valid_parameters and not arg.name.startswith('extern_'):
+                    raise Exception("Arg must in supported args or startswith 'extern_'")
             Drawer.algorithm_func_table[func_name] = {'func': func, 'analyser': func_analyser}
         return wrapper
 
@@ -128,10 +132,6 @@ class Drawer:
                             st.update(f'正在执行: {func_name}')
                         self.mat = self.raw_mat.copy()
                     args_body[arg.name] = getattr(self, arg.name)
-                elif arg.name.startswith('extern_'):
-                    continue
-                else:
-                    raise Exception(f"Parameter '{arg.name}' is not valid!")
             args_body.update(kw_extern_args)
             if os.path.exists(self.img_path.format(func_name)) and not self.force_update:
                 return
