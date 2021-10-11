@@ -138,56 +138,6 @@ class Drawer:
             algorithm(**args_body)
             self.draw(func_name)
 
-    # def aver(self):
-    #     if os.path.exists(self.img_path.format('aver')) and not self.force_update:
-    #         return
-    #
-    #     with console.status('正在执行: aver') as st:
-    #         if self.raw_mat is None:
-    #             self.loadMtx(st)
-    #         self.mat = self.raw_mat.copy()
-    #         self.mat /= self.div
-    #         self.absVal = max(abs(max([max(i) for i in self.mat])), abs(min([min(i) for i in self.mat])))
-    #         self.draw('aver')
-    #
-    # def abs(self):
-    #     if os.path.exists(self.img_path.format('abs')) and not self.force_update:
-    #         return
-    #
-    #     with console.status('正在执行: abs') as st:
-    #         if self.raw_mat is None:
-    #             self.loadMtx(st)
-    #         self.mat = self.raw_mat.copy()
-    #         self.mat[self.mat > 0] = 1
-    #         self.mat[self.mat < 0] = -1
-    #         self.absVal = 1
-    #         self.draw('abs')
-    #
-    # def real(self):
-    #     if os.path.exists(self.img_path.format('real')) and not self.force_update:
-    #         return
-    #
-    #     with console.status('正在执行: real') as st:
-    #         if self.raw_mat is None:
-    #             self.loadMtx(st)
-    #         self.mat = self.raw_mat.copy()
-    #         self.absVal = max(abs(max(self.coo_data)), abs(min(self.coo_data)))
-    #         self.draw('real')
-    #
-    # def log(self):
-    #     if os.path.exists(self.img_path.format('log')) and not self.force_update:
-    #         return
-    #
-    #     with console.status('正在执行: log') as st:
-    #         if self.raw_mat is None:
-    #             self.loadMtx(st)
-    #         self.mat = self.raw_mat.copy()
-    #         for _ in range(self.log_times):
-    #             self.mat[self.mat > 0] = np.log(self.mat[self.mat > 0])
-    #             self.mat[self.mat < 0] = -np.log(-self.mat[self.mat < 0])
-    #         self.absVal = max(abs(max([max(i) for i in self.mat])), abs(min([min(i) for i in self.mat])))
-    #         self.draw('log')
-
     def draw(self, suffix: str):
         if self.mat is None:
             return
