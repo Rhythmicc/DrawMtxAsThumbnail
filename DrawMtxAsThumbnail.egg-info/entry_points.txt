@@ -1,0 +1,3 @@
+[console_scripts]
+mtx-drawer = DrawMtxAsThumbnail.main:main
+

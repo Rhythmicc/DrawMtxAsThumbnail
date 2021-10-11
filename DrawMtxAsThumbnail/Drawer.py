@@ -1,7 +1,61 @@
 from . import *
+import inspect
+from inspect import isfunction
 
 
 class Drawer:
+    algorithm_func_table = {}
+    valid_parameters = {
+        'has_aver', 'log_times', 'mat_size', 'mtx',
+        'coo_shape', 'coo_data', 'coo_rows', 'coo_cols', 'mat', 'div',
+        'row_size', 'col_size', 'row_block_sz', 'col_block_sz'
+    }
+
+    @classmethod
+    def algorithmWrapper(cls):
+        """
+        Drawer 的算法装饰器，已内置 aver, log, real, abs四种算法，
+        您通过此装饰器可以轻松自定义算法，支持直接获取Drawer对象支持的参数，主要包含如下内容，
+        （如自定义算法需要其他参数输入，参数名需要以extern_开头，并需要以extern_xxx=bala的形式赋值）
+
+        has_aver: 是否有取平均值选项 => div是否可用
+
+        log_times: 外部设定的取log的次数
+
+        mat_size: 矩阵行列值较大的属性被分的块数
+
+        mtx: 文件的scipy.sparse.coo_matrix对象，未做任何更改
+
+        coo_shape: mtx的尺寸
+
+        coo_data: 矩阵的非零元值
+
+        coo_rows: 矩阵的非零元素行索引映射到mat的行值
+
+        coo_cols: 矩阵的非零元素列索引映射到mat的列值
+
+        mat: 被初始化好的二维画布对象，类型为numpy.array
+
+        div: 子矩阵非零元数，只有当has_aver为True时才会有效
+
+        row_size: mat的行数
+
+        col_size: mat的列数
+
+        row_block_sz: 划分的子矩阵的行数
+
+        col_block_sz: 划分的子矩阵的列数
+        """
+        def wrapper(func):
+            if not isfunction(func):
+                raise TypeError("Algorithm Wrapper should wrap a function!")
+            func_analyser = inspect.signature(func)
+            func_name = func.__name__.strip('_')
+            if func_name in Drawer.algorithm_func_table:
+                raise Exception(f"Algorithm '{func_name}' already exists!")
+            Drawer.algorithm_func_table[func_name] = {'func': func, 'analyser': func_analyser}
+        return wrapper
+
     def __init__(
             self, filepath: str, has_aver: bool, force_update: bool = False,
             set_log_times: int = 2, set_mat_size: int = 200):
@@ -13,36 +67,32 @@ class Drawer:
         self.log_times = set_log_times
         console.print(info_string, f'路径模板: "{self.img_path}"')
 
-        self.matSize = set_mat_size
+        self.mat_size = set_mat_size
 
-        self.ticks, self.mtx, self.coo_shape, \
-            self.coo_data, self.coo_rows, self.coo_cols, \
-            self.raw_mat, self.mat, self.div, \
-            self.row_size, self.col_size, \
-            self.row_block_sz, self.col_block_sz, \
-            self.x_ticks, self.y_ticks \
-            = None, None, None, None, None, None, None, None, None, None, None, None, None, None, None
+        self.mtx, self.coo_shape, self.coo_data, self.coo_rows, self.coo_cols, self.raw_mat, self.mat, self.div, \
+            self.row_size, self.col_size, self.row_block_sz, self.col_block_sz, self.x_ticks, self.y_ticks \
+            = None, None, None, None, None, None, None, None, None, None, None, None, None, None
         self.absVal = 1
 
     def loadMtx(self, st=None):
         if st:
             st.update(status='正在加载矩阵并生成画布')
         self.mtx = coo_matrix(mmread(self.filepath))
-        self.matSize = min(max(self.mtx.shape), self.matSize)
+        self.mat_size = min(max(self.mtx.shape), self.mat_size)
         self.coo_shape = self.mtx.shape
         if self.coo_shape[0] > self.coo_shape[1]:
             rate = self.coo_shape[1] / self.coo_shape[0]
-            self.row_size = self.matSize
+            self.row_size = self.mat_size
             self.row_block_sz = int(math.ceil(self.coo_shape[0] / self.row_size))
-            self.col_size = int(math.ceil(self.matSize * rate))
+            self.col_size = int(math.ceil(self.mat_size * rate))
             self.col_block_sz = int(math.ceil(self.coo_shape[1] / self.col_size))
             self.y_ticks = np.linspace(0, self.row_size, 4)
             self.x_ticks = np.linspace(0, self.col_size, max(my_round(4 * rate), 2))
         else:
             rate = self.coo_shape[0] / self.coo_shape[1]
-            self.col_size = self.matSize
+            self.col_size = self.mat_size
             self.col_block_sz = int(math.ceil(self.coo_shape[1] / self.col_size))
-            self.row_size = int(math.ceil(self.matSize * rate))
+            self.row_size = int(math.ceil(self.mat_size * rate))
             self.row_block_sz = int(math.ceil(self.coo_shape[0] / self.col_size))
             self.x_ticks = np.linspace(0, self.col_size, 4)
             self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
@@ -62,55 +112,81 @@ class Drawer:
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
 
-    def aver(self):
-        if os.path.exists(self.img_path.format('aver')) and not self.force_update:
-            return
+    def call(self, func_name: str, **kw_extern_args):
+        with console.status(f'正在执行: {func_name}') as st:
+            func_name = func_name.strip('_')
+            if func_name not in Drawer.algorithm_func_table:
+                raise KeyError(f"Algorithm '{func_name}' not registered!")
+            analyser = Drawer.algorithm_func_table[func_name]['analyser']
+            algorithm = Drawer.algorithm_func_table[func_name]['func']
+            args_body = {}
+            for arg in analyser.parameters.values():
+                if arg.name in Drawer.valid_parameters:
+                    if arg.name == 'mat':
+                        if self.raw_mat is None:
+                            self.loadMtx(st)
+                            st.update(f'正在执行: {func_name}')
+                        self.mat = self.raw_mat.copy()
+                    args_body[arg.name] = getattr(self, arg.name)
+                elif arg.name.startswith('extern_'):
+                    continue
+                else:
+                    raise Exception(f"Parameter '{arg.name}' is not valid!")
+            args_body.update(kw_extern_args)
+            if os.path.exists(self.img_path.format(func_name)) and not self.force_update:
+                return
+            algorithm(**args_body)
+            self.draw(func_name)
 
-        with console.status('正在执行: aver') as st:
-            if self.raw_mat is None:
-                self.loadMtx(st)
-            self.mat = self.raw_mat.copy()
-            self.mat /= self.div
-            self.absVal = max(abs(max([max(i) for i in self.mat])), abs(min([min(i) for i in self.mat])))
-            self.draw('aver')
-
-    def abs(self):
-        if os.path.exists(self.img_path.format('abs')) and not self.force_update:
-            return
-
-        with console.status('正在执行: abs') as st:
-            if self.raw_mat is None:
-                self.loadMtx(st)
-            self.mat = self.raw_mat.copy()
-            self.mat[self.mat > 0] = 1
-            self.mat[self.mat < 0] = -1
-            self.absVal = 1
-            self.draw('abs')
-
-    def real(self):
-        if os.path.exists(self.img_path.format('real')) and not self.force_update:
-            return
-
-        with console.status('正在执行: real') as st:
-            if self.raw_mat is None:
-                self.loadMtx(st)
-            self.mat = self.raw_mat.copy()
-            self.absVal = max(abs(max(self.coo_data)), abs(min(self.coo_data)))
-            self.draw('real')
-
-    def log(self):
-        if os.path.exists(self.img_path.format('log')) and not self.force_update:
-            return
-
-        with console.status('正在执行: log') as st:
-            if self.raw_mat is None:
-                self.loadMtx(st)
-            self.mat = self.raw_mat.copy()
-            for _ in range(self.log_times):
-                self.mat[self.mat > 0] = np.log(self.mat[self.mat > 0])
-                self.mat[self.mat < 0] = -np.log(-self.mat[self.mat < 0])
-            self.absVal = max(abs(max([max(i) for i in self.mat])), abs(min([min(i) for i in self.mat])))
-            self.draw('log')
+    # def aver(self):
+    #     if os.path.exists(self.img_path.format('aver')) and not self.force_update:
+    #         return
+    #
+    #     with console.status('正在执行: aver') as st:
+    #         if self.raw_mat is None:
+    #             self.loadMtx(st)
+    #         self.mat = self.raw_mat.copy()
+    #         self.mat /= self.div
+    #         self.absVal = max(abs(max([max(i) for i in self.mat])), abs(min([min(i) for i in self.mat])))
+    #         self.draw('aver')
+    #
+    # def abs(self):
+    #     if os.path.exists(self.img_path.format('abs')) and not self.force_update:
+    #         return
+    #
+    #     with console.status('正在执行: abs') as st:
+    #         if self.raw_mat is None:
+    #             self.loadMtx(st)
+    #         self.mat = self.raw_mat.copy()
+    #         self.mat[self.mat > 0] = 1
+    #         self.mat[self.mat < 0] = -1
+    #         self.absVal = 1
+    #         self.draw('abs')
+    #
+    # def real(self):
+    #     if os.path.exists(self.img_path.format('real')) and not self.force_update:
+    #         return
+    #
+    #     with console.status('正在执行: real') as st:
+    #         if self.raw_mat is None:
+    #             self.loadMtx(st)
+    #         self.mat = self.raw_mat.copy()
+    #         self.absVal = max(abs(max(self.coo_data)), abs(min(self.coo_data)))
+    #         self.draw('real')
+    #
+    # def log(self):
+    #     if os.path.exists(self.img_path.format('log')) and not self.force_update:
+    #         return
+    #
+    #     with console.status('正在执行: log') as st:
+    #         if self.raw_mat is None:
+    #             self.loadMtx(st)
+    #         self.mat = self.raw_mat.copy()
+    #         for _ in range(self.log_times):
+    #             self.mat[self.mat > 0] = np.log(self.mat[self.mat > 0])
+    #             self.mat[self.mat < 0] = -np.log(-self.mat[self.mat < 0])
+    #         self.absVal = max(abs(max([max(i) for i in self.mat])), abs(min([min(i) for i in self.mat])))
+    #         self.draw('log')
 
     def draw(self, suffix: str):
         if self.mat is None:
@@ -136,3 +212,29 @@ class Drawer:
         plt.colorbar()
         fig.savefig(self.img_path.format(suffix), format='svg', transparent=True)
         plt.close(fig)
+
+
+@Drawer.algorithmWrapper()
+def aver(mat, div):
+    mat /= div
+    return max(abs(max([max(i) for i in mat])), abs(min([min(i) for i in mat])))
+
+
+@Drawer.algorithmWrapper()
+def _abs(mat):
+    mat[mat > 0] = 1
+    mat[mat < 0] = -1
+    return 1
+
+
+@Drawer.algorithmWrapper()
+def real(coo_data) -> float:
+    return max(abs(max(coo_data)), abs(min(coo_data)))
+
+
+@Drawer.algorithmWrapper()
+def log(mat: np.ndarray, log_times: int) -> float:
+    for _ in range(log_times):
+        mat[mat > 0] = np.log(mat[mat > 0])
+        mat[mat < 0] = -np.log(-mat[mat < 0])
+    return max(abs(max([max(i) for i in mat])), abs(min([min(i) for i in mat])))

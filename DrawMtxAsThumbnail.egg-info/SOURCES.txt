@@ -1,0 +1,12 @@
+README.md
+setup.py
+DrawMtxAsThumbnail/Drawer.py
+DrawMtxAsThumbnail/__init__.py
+DrawMtxAsThumbnail/main.py
+DrawMtxAsThumbnail.egg-info/PKG-INFO
+DrawMtxAsThumbnail.egg-info/SOURCES.txt
+DrawMtxAsThumbnail.egg-info/dependency_links.txt
+DrawMtxAsThumbnail.egg-info/entry_points.txt
+DrawMtxAsThumbnail.egg-info/requires.txt
+DrawMtxAsThumbnail.egg-info/top_level.txt
+DrawMtxAsThumbnail.egg-info/zip-safe
