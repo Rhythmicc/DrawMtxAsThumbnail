@@ -1,2 +1,4 @@
 build
 dist/bias_k*
+.idea
+DrawMtxAsThumbnail.egg-info
