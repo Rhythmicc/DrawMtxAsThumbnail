@@ -1,3 +1,5 @@
+import numpy as np
+
 from . import *
 import inspect
 from inspect import isfunction
@@ -87,23 +89,23 @@ class Drawer:
         if self.coo_shape[0] > self.coo_shape[1]:
             rate = self.coo_shape[1] / self.coo_shape[0]
             self.row_size = self.mat_size
-            self.row_block_sz = int(math.ceil(self.coo_shape[0] / self.row_size))
+            self.row_block_sz = self.coo_shape[0] / self.row_size
             self.col_size = int(math.ceil(self.mat_size * rate))
-            self.col_block_sz = int(math.ceil(self.coo_shape[1] / self.col_size))
+            self.col_block_sz = self.coo_shape[1] / self.col_size
             self.y_ticks = np.linspace(0, self.row_size, 4)
             self.x_ticks = np.linspace(0, self.col_size, max(my_round(4 * rate), 2))
         else:
             rate = self.coo_shape[0] / self.coo_shape[1]
             self.col_size = self.mat_size
-            self.col_block_sz = int(math.ceil(self.coo_shape[1] / self.col_size))
+            self.col_block_sz = self.coo_shape[1] / self.col_size
             self.row_size = int(math.ceil(self.mat_size * rate))
-            self.row_block_sz = int(math.ceil(self.coo_shape[0] / self.col_size))
+            self.row_block_sz = self.coo_shape[0] / self.col_size
             self.x_ticks = np.linspace(0, self.col_size, 4)
             self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
 
         self.coo_data = self.mtx.data
-        self.coo_rows = self.mtx.row // self.row_block_sz
-        self.coo_cols = self.mtx.col // self.col_block_sz
+        self.coo_rows = np.floor(self.mtx.row / self.row_block_sz).astype(np.int)
+        self.coo_cols = np.floor(self.mtx.col / self.col_block_sz).astype(np.int)
         self.raw_mat = np.zeros((self.row_size, self.col_size), dtype=float)
 
         if self.has_aver:
@@ -124,18 +126,17 @@ class Drawer:
             analyser = Drawer.algorithm_func_table[func_name]['analyser']
             algorithm = Drawer.algorithm_func_table[func_name]['func']
             args_body = {}
+            if self.raw_mat is None:
+                self.loadMtx(st)
+                st.update(f'正在执行: {func_name}')
+            self.mat = self.raw_mat.copy()
             for arg in analyser.parameters.values():
                 if arg.name in Drawer.valid_parameters:
-                    if arg.name == 'mat':
-                        if self.raw_mat is None:
-                            self.loadMtx(st)
-                            st.update(f'正在执行: {func_name}')
-                        self.mat = self.raw_mat.copy()
                     args_body[arg.name] = getattr(self, arg.name)
             args_body.update(kw_extern_args)
             if os.path.exists(self.img_path.format(func_name)) and not self.force_update:
                 return
-            algorithm(**args_body)
+            self.absVal = algorithm(**args_body)
             self.draw(func_name)
 
     def draw(self, suffix: str):
