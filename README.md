@@ -11,21 +11,28 @@ python3 setup.py install
 ## 运行
 
 ```shell
-mtx-drawer <aver | abs | real | log...> [-one <*.mtx>] [--set-log-times <n: int>] [--force]
+mtx-drawer draw-one [--force] [--log_times <n: int>] <filepath> -ops [aver, abs, real, log]
+mtx-drawer draw [--force] [--log_times <n: int>] -ops [aver, abs, real, log]
+```
+#### 获取帮助
+
+```
+$ mtx-drawer --help
+                                                  帮助 HELP
+
+         子命令          描述               必填参数                          可选参数
+       Sub Command   Description         Required Args                     Optionnal Args
+      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        draw-one     单个文件处理   filepath: str, ops: list   force: bool = False, log_times: int = 2
+          draw       多个文件处理          ops: list           force: bool = False, log_times: int = 2
 ```
 
-| 参数                         | 说明                                                         |
-| ---------------------------- | ------------------------------------------------------------ |
-| `<aver, abs, real, log>`  | 选择绘图算法, 目前支持针对子矩阵元素和取均值、取绝对值（正值为1，负值为-1）、不做处理、取若干次log |
-| `[-one <*.mtx>]`             | 放弃自动搜索，指定一个mtx文件开始画                          |
-| `[--set-log-times <n: int>]` | 设置log算法的取log次数，默认两次                             |
-| `[--force]`                  | 强制覆盖已有的画图结果                                       |
 
 ### 例子
 
 ```shell
-mtx-drawer aver abs log real -one 2.mtx --set-log-times 0 --force # 一次性绘制2.mtx的四种图，log取0次，强制替换
-mtx-drawer aver abs log --force # 绘制当前目录及子目录下的全部mtx文件的三种图，强制替换
+mtx-drawer draw-one 2.mtx --force --log-times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
+mtx-drawer draw --force -ops aver abs log # 绘制当前目录及子目录下的全部mtx文件的三种图，强制替换
 ```
 
 ### 特殊说明
