@@ -31,7 +31,7 @@ $ mtx-drawer --help
 ### 例子
 
 ```shell
-mtx-drawer draw-one 2.mtx --force --log-times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
+mtx-drawer draw-one 2.mtx --force --log_times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
 mtx-drawer draw --force -ops aver abs log # 绘制当前目录及子目录下的全部mtx文件的三种图，强制替换
 ```
 
