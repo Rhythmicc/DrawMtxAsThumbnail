@@ -22,7 +22,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=True,
-    install_requires=['numpy', 'scipy', 'matplotlib', 'rich'],
+    install_requires=['numpy', 'scipy', 'matplotlib', 'Qpro'],
     entry_points={
         'console_scripts': [
             'mtx-drawer = DrawMtxAsThumbnail.main:main'
