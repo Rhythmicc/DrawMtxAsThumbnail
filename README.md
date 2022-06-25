@@ -23,17 +23,11 @@ mtx-drawer draw [--force] [--log_times <n: int>] <-ops <aver | abs | real | log>
 
 ### 获取帮助
 
-```
-$ mtx-drawer --help
-                                                  帮助 HELP
-
-         子命令          描述               必填参数                          可选参数
-       Sub Command   Description         Required Args                     Optionnal Args
-      -------------------------------------------------------------------------------------------------
-        draw-one     单个文件处理   filepath: str, ops: list   force: bool = False, log_times: int = 2
-          draw       多个文件处理          ops: list           force: bool = False, log_times: int = 2
+```shell
+mtx-drawer --help
 ```
 
+![](https://cos.rhythmlian.cn/ImgBed/181da7a7c7f6dae9b8c43b44ab25fdce.png)
 
 ### 例子
 
