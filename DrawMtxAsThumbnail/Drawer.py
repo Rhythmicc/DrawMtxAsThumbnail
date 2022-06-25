@@ -104,7 +104,7 @@ class Drawer:
             self.col_size = self.mat_size
             self.col_block_sz = self.coo_shape[1] / self.col_size
             self.row_size = int(math.ceil(self.mat_size * rate))
-            self.row_block_sz = self.coo_shape[0] / self.col_size
+            self.row_block_sz = self.coo_shape[0] / self.row_size
             self.x_ticks = np.linspace(0, self.col_size, 4)
             self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
 
