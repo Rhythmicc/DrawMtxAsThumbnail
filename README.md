@@ -27,7 +27,7 @@ mtx-drawer draw [--force] [--log_times <n: int>] <-ops <aver | abs | real | log>
 mtx-drawer --help
 ```
 
-![](https://cos.rhythmlian.cn/ImgBed/181da7a7c7f6dae9b8c43b44ab25fdce.png)
+![](https://cos.rhythmlian.cn/ImgBed/376449cfb835db2d7a3eb49aa760d80b.png)
 
 ### 例子
 
