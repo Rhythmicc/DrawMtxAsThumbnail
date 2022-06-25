@@ -14,8 +14,12 @@ python3 setup.py install
 mtx-drawer draw-one [--force] [--log_times <n: int>] <filepath> <-ops <aver | abs | real | log>... >
 mtx-drawer draw [--force] [--log_times <n: int>] <-ops <aver | abs | real | log>... >
 ```
+### 解释
+1. 第一条命令是为文件<filepath>画缩略图，其中<ops>是必填的多选参数只能在命令末尾赋值，用于指定缩略图的类型，其中<aver>表示平均值，<abs>表示绝对值，<real>表示实际值，<log>表示对数值进行对数变换; force表示强制重新画缩略图默认为否，log_times表示画缩略图对像素值取log的次数。
+2. 第二条命令会递归搜索当前路径下的所有mtx文件并绘制缩略图，参数含义与上一条描述一致。
 
-注意：ops选项必须在命令的末尾，否则会报错
+### 注意
+1. ops作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
 
 #### 获取帮助
 
