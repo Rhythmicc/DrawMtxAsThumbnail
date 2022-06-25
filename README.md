@@ -11,9 +11,12 @@ python3 setup.py install
 ## 运行
 
 ```shell
-mtx-drawer draw-one [--force] [--log_times <n: int>] <filepath> -ops [aver, abs, real, log]
-mtx-drawer draw [--force] [--log_times <n: int>] -ops [aver, abs, real, log]
+mtx-drawer draw-one [--force] [--log_times <n: int>] <filepath> <-ops <aver | abs | real | log>... >
+mtx-drawer draw [--force] [--log_times <n: int>] <-ops <aver | abs | real | log>... >
 ```
+
+注意：ops选项必须在命令的末尾，否则会报错
+
 #### 获取帮助
 
 ```
