@@ -3,7 +3,8 @@
 ## 安装
 
 ```shell
-python3 setup.py install
+python3 setup.py sdist
+pip3 install dist/DrawMtxAsThumbnail-0.0.1.tar.gz
 ```
 
 自动安装依赖并注册一个命令`mtx-drawer`
