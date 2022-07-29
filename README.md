@@ -5,6 +5,10 @@
 ```shell
 python3 setup.py sdist
 pip3 install dist/MtxDrawer-0.0.1.tar.gz
+
+# 或者
+
+pip3 install MtxDrawer
 ```
 
 自动安装依赖并注册一个命令`mtx-drawer`
@@ -46,7 +50,7 @@ mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全
 ## 基于Drawer类的自定义开发
 
 ```python
-from DrawMtxAsThumbnail.Drawer import Drawer
+from MtxDrawer.Drawer import Drawer
 
 """
 您可以通过如下方式自定义算法并通过Drawer对象的call方法来调用；
