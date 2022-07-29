@@ -1,6 +1,6 @@
 from QuickProject.Commander import Commander
-from DrawMtxAsThumbnail import console, info_string
-from DrawMtxAsThumbnail.Drawer import Drawer
+from . import console, info_string
+from .Drawer import Drawer
 
 app = Commander(True)
 rt_path = './'
@@ -17,12 +17,14 @@ def draw_one(filepath: str, ops: list, force: bool = False, log_times: int = 2):
 
 
 @app.command()
-def draw(ops: list, force: bool = False, log_times: int = 2):
+def draw(ops: list, force: bool = False, log_times: int = 2, mat_size: int = 200, block_size: int = -1):
     """
     多个文件处理
     :param ops: 操作列表
     :param force: 是否强制更新
     :param log_times: 取log次数
+    :param mat_size: 缩略图尺寸
+    :param block_size: 设置块大小（此参数设置后将覆盖mat_size）
     :return:
     """
     import os
@@ -35,7 +37,7 @@ def draw(ops: list, force: bool = False, log_times: int = 2):
             if file.endswith('.mtx'):
                 try:
                     console.print(info_string, f'正在处理: "{rt + file}"')
-                    drawer = Drawer(rt + file, has_aver, force, log_times)
+                    drawer = Drawer(rt + file, has_aver, force, log_times, set_mat_size=mat_size, set_block_size=block_size)
                     for func in ops:
                         drawer.call(func)
                 except Exception:
