@@ -4,7 +4,7 @@ from QuickProject import QproWarnString as warn_string
 from QuickProject import QproErrorString as erro_string
 from decimal import getcontext, Decimal, ROUND_HALF_EVEN
 
-name = 'DrawMtxAsThumbnail'
+name = 'MtxDrawer'
 getcontext().rounding = ROUND_HALF_EVEN
 
 

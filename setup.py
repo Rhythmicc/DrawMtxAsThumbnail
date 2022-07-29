@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 VERSION = '0.0.1'
 
 setup(
-    name='DrawMtxAsThumbnail',
+    name='MtxDrawer',
     version=VERSION,
     description='Draw Mtx As Thumbnail',
     long_description=long_description,
@@ -25,7 +25,7 @@ setup(
     install_requires=['numpy', 'scipy', 'matplotlib', 'Qpro'],
     entry_points={
         'console_scripts': [
-            'mtx-drawer = DrawMtxAsThumbnail.main:main'
+            'mtx-drawer = MtxDrawer.main:main'
         ]
     },
 )

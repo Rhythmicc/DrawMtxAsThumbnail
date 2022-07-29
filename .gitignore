@@ -1,7 +1,7 @@
 build
 dist/bias_k*
 .idea
-DrawMtxAsThumbnail.egg-info
+MtxDrawer.egg-info
 results/bayer10.mtx
 results/bayer10_abs.svg
-DrawMtxAsThumbnail/__pycache__
+MtxDrawer/__pycache__
