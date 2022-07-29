@@ -1,4 +1,4 @@
-from DrawMtxAsThumbnail.Drawer import Drawer
+from MtxDrawer.Drawer import Drawer
 
 
 @Drawer.algorithmWrapper()
