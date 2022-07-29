@@ -4,3 +4,4 @@ dist/bias_k*
 DrawMtxAsThumbnail.egg-info
 results/bayer10.mtx
 results/bayer10_abs.svg
+DrawMtxAsThumbnail/__pycache__
