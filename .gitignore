@@ -2,3 +2,5 @@ build
 dist/bias_k*
 .idea
 DrawMtxAsThumbnail.egg-info
+results/bayer10.mtx
+results/bayer10_abs.svg

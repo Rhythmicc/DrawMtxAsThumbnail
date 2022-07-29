@@ -69,7 +69,17 @@ class Drawer:
 
     def __init__(
             self, filepath: str, has_aver: bool, force_update: bool = False,
-            set_log_times: int = 2, set_mat_size: int = 200):
+            set_log_times: int = 2, set_mat_size: int = 200, set_block_size: int = -1):
+        """
+        初始化Drawer对象
+
+        :param filepath: 矩阵文件路径
+        :param has_aver: 是否有取平均值选项
+        :param force_update: 是否强制更新图像
+        :param set_log_times: 取log的次数
+        :param set_mat_size: 缩略图尺寸
+        :param set_block_size: 设置块大小（此参数设置后将覆盖set_mat_size）
+        """
         self.filepath = filepath
         self.force_update = force_update
         self.has_aver = has_aver
@@ -79,6 +89,7 @@ class Drawer:
         console.print(info_string, f'路径模板: "{self.img_path}"')
 
         self.mat_size = set_mat_size
+        self.block_sz = set_block_size
 
         self.mtx, self.coo_shape, self.coo_data, self.coo_rows, self.coo_cols, self.raw_mat, self.mat, self.div, \
             self.row_size, self.col_size, self.row_block_sz, self.col_block_sz, self.x_ticks, self.y_ticks \
@@ -89,24 +100,31 @@ class Drawer:
         if st:
             st.update(status='正在加载矩阵并生成画布')
         self.mtx = coo_matrix(mmread(self.filepath))
-        self.mat_size = min(max(self.mtx.shape), self.mat_size)
         self.coo_shape = self.mtx.shape
-        if self.coo_shape[0] > self.coo_shape[1]:
-            rate = self.coo_shape[1] / self.coo_shape[0]
-            self.row_size = self.mat_size
-            self.row_block_sz = self.coo_shape[0] / self.row_size
-            self.col_size = int(math.ceil(self.mat_size * rate))
-            self.col_block_sz = self.coo_shape[1] / self.col_size
+        if self.block_sz > 0:
+            self.row_size = int(math.ceil(self.coo_shape[0] / self.block_sz))
+            self.col_size = int(math.ceil(self.coo_shape[1] / self.block_sz))
+            self.row_block_sz = self.col_block_sz = self.block_sz
             self.y_ticks = np.linspace(0, self.row_size, 4)
-            self.x_ticks = np.linspace(0, self.col_size, max(my_round(4 * rate), 2))
-        else:
-            rate = self.coo_shape[0] / self.coo_shape[1]
-            self.col_size = self.mat_size
-            self.col_block_sz = self.coo_shape[1] / self.col_size
-            self.row_size = int(math.ceil(self.mat_size * rate))
-            self.row_block_sz = self.coo_shape[0] / self.row_size
             self.x_ticks = np.linspace(0, self.col_size, 4)
-            self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
+        else:
+            self.mat_size = min(max(self.mtx.shape), self.mat_size)
+            if self.coo_shape[0] >= self.coo_shape[1]:
+                rate = self.coo_shape[1] / self.coo_shape[0]
+                self.row_size = self.mat_size
+                self.row_block_sz = self.coo_shape[0] / self.row_size
+                self.col_size = int(math.ceil(self.mat_size * rate))
+                self.col_block_sz = self.coo_shape[1] / self.col_size
+                self.y_ticks = np.linspace(0, self.row_size, 4)
+                self.x_ticks = np.linspace(0, self.col_size, max(my_round(4 * rate), 2))
+            else:
+                rate = self.coo_shape[0] / self.coo_shape[1]
+                self.col_size = self.mat_size
+                self.col_block_sz = self.coo_shape[1] / self.col_size
+                self.row_size = int(math.ceil(self.mat_size * rate))
+                self.row_block_sz = self.coo_shape[0] / self.row_size
+                self.x_ticks = np.linspace(0, self.col_size, 4)
+                self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
 
         self.coo_data = self.mtx.data
         self.coo_rows = np.floor(self.mtx.row / self.row_block_sz).astype(np.int)
