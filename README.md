@@ -3,12 +3,7 @@
 ## 安装
 
 ```shell
-python3 setup.py sdist
-pip3 install dist/MtxDrawer-0.0.1.tar.gz
-
-# 或者
-
-pip3 install MtxDrawer
+pip3 install MtxDrawer -U
 ```
 
 自动安装依赖并注册一个命令`mtx-drawer`
@@ -16,12 +11,12 @@ pip3 install MtxDrawer
 ## 运行
 
 ```shell
-mtx-drawer draw-one [--force] [--log_times <n: int>] <filepath> <-ops <aver | abs | real | log>... >
-mtx-drawer draw [--force] [--log_times <n: int>] <-ops <aver | abs | real | log>... >
+mtx-drawer draw-one [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_size <n: int>] <filepath> <-ops <aver | abs | real | log>... >
+mtx-drawer draw [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_size <n: int>] <-ops <aver | abs | real | log>... >
 ```
 ### 解释
 
-1. 第一条命令是为文件`<filepath>`画缩略图，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log_times`表示画缩略图对像素值取log的次数默认为2。
+1. 第一条命令是为文件`<filepath>`画缩略图，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log_times`表示画缩略图对像素值取log的次数默认为2，`mat_size`表示缩略图的尺寸（默认是200 * 200的图像），`block_size`直接设置块大小（开启次选项后将覆盖掉`mat_size`参数）。
 2. 第二条命令会递归搜索当前路径下的所有mtx文件并绘制缩略图，参数含义与上一条描述一致。
 
 注意: ops作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
@@ -32,7 +27,7 @@ mtx-drawer draw [--force] [--log_times <n: int>] <-ops <aver | abs | real | log>
 mtx-drawer --help
 ```
 
-![](https://cos.rhythmlian.cn/ImgBed/376449cfb835db2d7a3eb49aa760d80b.png)
+![](https://cos.rhythmlian.cn/ImgBed/1a5f9059ad00e7774379d8a4c44495f7.png)
 
 ### 例子
 
