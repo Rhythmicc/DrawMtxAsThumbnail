@@ -18,7 +18,10 @@ def draw_one(filepath: str, ops: list, force: bool = False, log_times: int = 2, 
     :param block_size: 设置块大小（此参数设置后将覆盖mat_size）
     :return:
     """
-    drawer = Drawer(filepath, 'aver' in ops, force, log_times, set_mat_size=mat_size, set_block_size=block_size)
+    try:
+        drawer = Drawer(filepath, 'aver' in ops, force, log_times, set_mat_size=mat_size, set_block_size=block_size)
+    except ValueError:
+        return
     for func in ops:
         drawer.call(func)
 
@@ -50,6 +53,8 @@ def draw(ops: list, force: bool = False, log_times: int = 2, mat_size: int = 200
                     )
                     for func in ops:
                         drawer.call(func)
+                except ValueError:
+                    continue
                 except Exception:
                     console.print_exception()
                 else:

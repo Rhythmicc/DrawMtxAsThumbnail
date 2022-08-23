@@ -99,7 +99,11 @@ class Drawer:
     def loadMtx(self, st=None):
         if st:
             st.update(status='正在加载矩阵并生成画布')
-        self.mtx = coo_matrix(mmread(self.filepath))
+        try:
+            self.mtx = coo_matrix(mmread(self.filepath))
+        except ValueError:
+            console.print(erro_string, '读取矩阵失败: 可能此文件格式不符合标准Matrix Market格式, 或位置值不以1作为第一个元素')
+            raise ValueError('读取矩阵失败: 可能此文件格式不符合标准Matrix Market格式, 或位置值不以1作为第一个元素')
         self.coo_shape = self.mtx.shape
         if self.block_sz > 0:
             self.row_size = int(math.ceil(self.coo_shape[0] / self.block_sz))

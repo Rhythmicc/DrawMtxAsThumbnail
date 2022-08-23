@@ -1,7 +1,0 @@
-build
-dist/bias_k*
-.idea
-MtxDrawer.egg-info
-results/bayer10.mtx
-results/bayer10_abs.svg
-MtxDrawer/__pycache__
