@@ -2,8 +2,7 @@ from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-with open('VERSION', 'r') as fh:
-    VERSION = fh.read().strip()
+VERSION = 0.0.6
 
 setup(
     name='MtxDrawer',
