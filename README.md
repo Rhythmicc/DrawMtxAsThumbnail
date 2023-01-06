@@ -1,4 +1,4 @@
-# Draw Mtx As Thumbnail - 将Mtx画为缩略图
+# Draw Mtx As Thumbnail - 将 Mtx 画为缩略图
 
 ## 安装
 
@@ -14,12 +14,13 @@ pip3 install MtxDrawer -U
 mtx-drawer draw-one [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_size <n: int>] <filepath> <-ops <aver | abs | real | log>... >
 mtx-drawer draw [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_size <n: int>] <-ops <aver | abs | real | log>... >
 ```
+
 ### 解释
 
-1. 第一条命令是为文件`<filepath>`画缩略图，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log_times`表示画缩略图对像素值取log的次数默认为2，`mat_size`表示缩略图的尺寸（默认是200 * 200的图像），`block_size`直接设置块大小（开启次选项后将覆盖掉`mat_size`参数）。
-2. 第二条命令会递归搜索当前路径下的所有mtx文件并绘制缩略图，参数含义与上一条描述一致。
+1. 第一条命令是为文件`<filepath>`画缩略图 (`filepath`无需是 mtx 文件，但需要能被`scipy.io.mmread`读取)，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log_times`表示画缩略图对像素值取 log 的次数默认为 2，`mat_size`表示缩略图的尺寸（默认是 200 \* 200 的图像），`block_size`直接设置块大小（开启次选项后将覆盖掉`mat_size`参数）。
+2. 第二条命令会递归搜索当前路径下的所有 mtx 文件并绘制缩略图，参数含义与上一条描述一致。
 
-注意: ops作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
+注意: ops 作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
 
 ### 获取帮助
 
@@ -42,7 +43,9 @@ mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全
 
 子矩阵划分方式：当行列不相等时，较大的属性被分为`matSize`块，较小的属性为`rate * matSize`块；其中`rate`为$ min(m,n)/max(m,n) $
 
-## 基于Drawer类的自定义开发
+## 基于 Drawer 类的自定义开发
+
+当默认提供的四种算法无法满足需要时，可以按如下方式自行设计算法：
 
 ```python
 from MtxDrawer.Drawer import Drawer
@@ -52,8 +55,8 @@ from MtxDrawer.Drawer import Drawer
 自定义算法可接受的参数将在下表中说明，此外，自定义算法必须返回一个数值用于表示color_bar的显示范围（返回1则表示-1~1）
 """
 
-@Drawer.algorithmWrapper()
-def myOwnAlgorithm(mat, extern_arg):
+@Drawer.algorithmWrapper() # 算法装饰器
+def myOwnAlgorithm(mat, extern_arg): # 参数命名要符合下表的要求，mat是下表第9项，extern_arg是下表第15项
     print(extern_arg)
     return max(abs(max([max(i) for i in mat])), abs(min([min(i) for i in mat])))
 
@@ -70,31 +73,30 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 """
 ```
 
-| 合法参数  | 说明 |
-| --------- | ---- |
-| `has_aver` | 是否有取平均值选项 => div是否可用 |
-| `log_times` | 外部设定的取log的次数 |
-| `mat_size` | 矩阵行列值较大的属性被分的块数 |
-| `mtx` | 文件的scipy.sparse.coo_matrix对象，未做任何更改 |
-| `coo_shape` | mtx的尺寸 |
-| `coo_data` | 矩阵的非零元值 |
-| `coo_rows` | 矩阵的非零元素行索引映射到mat的行值 |
-| `coo_cols` | 矩阵的非零元素列索引映射到mat的列值 |
-| `mat` | 被初始化好的二维画布对象，类型为numpy.array |
-| `div` | 子矩阵非零元数，只有当has_aver为True时才会有效 |
-| `row_size` | mat的行数 |
-| `col_size` | mat的列数 |
-| `row_block_sz` | 划分的子矩阵的行数 |
-| `col_block_sz` | 划分的子矩阵的列数 |
-| `extern_*` | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
+｜ 序号 | 合法参数 | 说明 |
+｜:---:| -------------- | -------------------------------------------------- |
+｜ 1 | `has_aver` | 是否有取平均值选项 => div 是否可用 |
+｜ 2 | `log_times` | 外部设定的取 log 的次数 |
+｜ 3 | `mat_size` | 矩阵行列值较大的属性被分的块数 |
+｜ 4 | `mtx` | 文件的 scipy.sparse.coo*matrix 对象，未做任何更改 |
+｜ 5 | `coo_shape` | mtx 的尺寸 |
+｜ 6 | `coo_data` | 矩阵的非零元值 |
+｜ 7 | `coo_rows` | 矩阵的非零元素行索引映射到 mat 的行值 |
+｜ 8 | `coo_cols` | 矩阵的非零元素列索引映射到 mat 的列值 |
+｜ 9 | `mat` | 被初始化好的二维画布对象，类型为 numpy.array |
+｜ 10 | `div` | 子矩阵非零元数，只有当 has_aver 为 True 时才会有效 |
+｜ 11 | `row_size` | mat 的行数 |
+｜ 12 | `col_size` | mat 的列数 |
+｜ 13 | `row_block_sz` | 划分的子矩阵的行数 |
+｜ 14 | `col_block_sz` | 划分的子矩阵的列数 |
+｜ 15 | `extern*\*` | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
 
 ## 样例
 
-|     ![](./img/ash85_aver.png)<br />平均值     |    ![](./img/ash85_real.png)<br />不处理    |
-| :-------------------------------------------: | :-----------------------------------------: |
-| ![](./img/ash85_log.png)<br /><b>取0次log</b> | ![](./img/ash85_abs.png)<br /><b>绝对值</b> |
+|      ![](./img/ash85_aver.png)<br />平均值       |    ![](./img/ash85_real.png)<br />不处理    |
+| :----------------------------------------------: | :-----------------------------------------: |
+| ![](./img/ash85_log.png)<br /><b>取 0 次 log</b> | ![](./img/ash85_abs.png)<br /><b>绝对值</b> |
 
-### 现代IDE下的提示
+### 现代 IDE 下的提示
 
 ![](./img/1.png)
-
