@@ -59,7 +59,7 @@ mtx-drawer complete
 
 效果：
 
-![](./dist/fig-demo.gif)
+![](./dist/fig-demo.mp4)
 
 ## 基于 Drawer 类的自定义开发
 
