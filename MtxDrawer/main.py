@@ -89,6 +89,19 @@ def draw(
     console.print("-" * console.width)
 
 
+@app.command()
+def update():
+    """
+    更新
+    :return:
+    """
+    from QuickProject import user_pip, external_exec
+
+    with console.status("正在更新..."):
+        external_exec(f"{user_pip} install -U MtxDrawer")
+    console.print(info_string, "更新完成")
+
+
 def main():
     app()
 
