@@ -1,16 +1,16 @@
 {
- "compile_tool": "",
- "compile_filename": "",
- "executable_filename": "",
- "input_file": "",
- "template_root": "",
- "server_targets": [
-  {
-   "user": "lianhaocheng",
-   "host": "localhost",
-   "path": "/opt/homebrew/lib/python3.10/site-packages/",
-   "port": "22"
-  }
- ],
- "enable_complete": true
+    "build": "",
+    "entry_point": "",
+    "executable": "",
+    "input_file": "",
+    "template_root": "",
+    "server_targets": [
+        {
+            "user": "lianhaocheng",
+            "host": "localhost",
+            "path": "/opt/homebrew/lib/python3.10/site-packages/",
+            "port": "22"
+        }
+    ],
+    "enable_complete": true
 }
