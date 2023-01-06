@@ -89,7 +89,7 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 |  12  | `col_size`     | mat 的列数                                         |
 |  13  | `row_block_sz` | 划分的子矩阵的行数                                 |
 |  14  | `col_block_sz` | 划分的子矩阵的列数                                 |
-|  15  | `extern*\*`    | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
+|  15  | `extern_*`     | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
 
 ## 样例
 
