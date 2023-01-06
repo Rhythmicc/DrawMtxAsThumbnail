@@ -1,5 +1,11 @@
 # Draw Mtx As Thumbnail - 将 Mtx 画为缩略图
 
+## 样例
+
+|      ![](./img/ash85_aver.png)<br />平均值       |    ![](./img/ash85_real.png)<br />不处理    |
+| :----------------------------------------------: | :-----------------------------------------: |
+| ![](./img/ash85_log.png)<br /><b>取 0 次 log</b> | ![](./img/ash85_abs.png)<br /><b>绝对值</b> |
+
 ## 安装
 
 ```shell
@@ -90,12 +96,6 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 |  13  | `row_block_sz` | 划分的子矩阵的行数                                 |
 |  14  | `col_block_sz` | 划分的子矩阵的列数                                 |
 |  15  | `extern_*`     | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
-
-## 样例
-
-|      ![](./img/ash85_aver.png)<br />平均值       |    ![](./img/ash85_real.png)<br />不处理    |
-| :----------------------------------------------: | :-----------------------------------------: |
-| ![](./img/ash85_log.png)<br /><b>取 0 次 log</b> | ![](./img/ash85_abs.png)<br /><b>绝对值</b> |
 
 ### 现代 IDE 下的提示
 
