@@ -73,23 +73,23 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 """
 ```
 
-｜ 序号 | 合法参数 | 说明 |
-｜ :---: | -------------- | -------------------------------------------------- |
-｜ 1 | `has_aver` | 是否有取平均值选项 => div 是否可用 |
-｜ 2 | `log_times` | 外部设定的取 log 的次数 |
-｜ 3 | `mat_size` | 矩阵行列值较大的属性被分的块数 |
-｜ 4 | `mtx` | 文件的 scipy.sparse.coo*matrix 对象，未做任何更改 |
-｜ 5 | `coo_shape` | mtx 的尺寸 |
-｜ 6 | `coo_data` | 矩阵的非零元值 |
-｜ 7 | `coo_rows` | 矩阵的非零元素行索引映射到 mat 的行值 |
-｜ 8 | `coo_cols` | 矩阵的非零元素列索引映射到 mat 的列值 |
-｜ 9 | `mat` | 被初始化好的二维画布对象，类型为 numpy.array |
-｜ 10 | `div` | 子矩阵非零元数，只有当 has_aver 为 True 时才会有效 |
-｜ 11 | `row_size` | mat 的行数 |
-｜ 12 | `col_size` | mat 的列数 |
-｜ 13 | `row_block_sz` | 划分的子矩阵的行数 |
-｜ 14 | `col_block_sz` | 划分的子矩阵的列数 |
-｜ 15 | `extern*\*` | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
+| 序号 | 合法参数       | 说明                                               |
+| :--: | -------------- | -------------------------------------------------- |
+|  1   | `has_aver`     | 是否有取平均值选项 => div 是否可用                 |
+|  2   | `log_times`    | 外部设定的取 log 的次数                            |
+|  3   | `mat_size`     | 矩阵行列值较大的属性被分的块数                     |
+|  4   | `mtx`          | 文件的 scipy.sparse.coo\*matrix 对象，未做任何更改 |
+|  5   | `coo_shape`    | mtx 的尺寸                                         |
+|  6   | `coo_data`     | 矩阵的非零元值                                     |
+|  7   | `coo_rows`     | 矩阵的非零元素行索引映射到 mat 的行值              |
+|  8   | `coo_cols`     | 矩阵的非零元素列索引映射到 mat 的列值              |
+|  9   | `mat`          | 被初始化好的二维画布对象，类型为 numpy.array       |
+|  10  | `div`          | 子矩阵非零元数，只有当 has_aver 为 True 时才会有效 |
+|  11  | `row_size`     | mat 的行数                                         |
+|  12  | `col_size`     | mat 的列数                                         |
+|  13  | `row_block_sz` | 划分的子矩阵的行数                                 |
+|  14  | `col_block_sz` | 划分的子矩阵的列数                                 |
+|  15  | `extern*\*`    | 额外的参数命名方式，需以"extern_xx=bala"的方式调用 |
 
 ## 样例
 
