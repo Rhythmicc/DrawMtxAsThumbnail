@@ -49,6 +49,14 @@ mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全
 
 子矩阵划分方式：当行列不相等时，较大的属性被分为`matSize`块，较小的属性为`rate * matSize`块；其中`rate`为$ min(m,n)/max(m,n) $
 
+### 命令行补全
+
+基于[QuickProject.Commmander](https://github.com/Rhythmicc/QuickProject)开发的命令行 APP 可以提供 zsh 或 [fig](https://fig.io/) 的补全脚本：
+
+```sh
+mtx-drawer complete
+```
+
 ## 基于 Drawer 类的自定义开发
 
 当默认提供的四种算法无法满足需要时，可以按如下方式自行设计算法：

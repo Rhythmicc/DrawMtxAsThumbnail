@@ -93,7 +93,6 @@ def draw(
 def update():
     """
     更新
-    :return:
     """
     from QuickProject import user_pip, external_exec
 
