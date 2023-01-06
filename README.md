@@ -59,7 +59,7 @@ mtx-drawer complete
 
 效果：
 
-https://cos.rhythmlian.cn/ImgBed/1ddf9539f1649175e1f6f608dda7333f.mp4
+![](./dist/fig-demo.gif)
 
 ## 基于 Drawer 类的自定义开发
 
