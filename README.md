@@ -57,6 +57,10 @@ mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全
 mtx-drawer complete
 ```
 
+效果：
+
+https://cos.rhythmlian.cn/ImgBed/1ddf9539f1649175e1f6f608dda7333f.mp4
+
 ## 基于 Drawer 类的自定义开发
 
 当默认提供的四种算法无法满足需要时，可以按如下方式自行设计算法：
