@@ -2,9 +2,9 @@
 
 ## 样例
 
-|      ![](./img/ash85_aver.png)<br />平均值       |    ![](./img/ash85_real.png)<br />不处理    |
-| :----------------------------------------------: | :-----------------------------------------: |
-| ![](./img/ash85_log.png)<br /><b>取 0 次 log</b> | ![](./img/ash85_abs.png)<br /><b>绝对值</b> |
+|      ![aver](./img/ash85_aver.png)<br />平均值      |   ![real](./img/ash85_real.png)<br />不处理    |
+| :-------------------------------------------------: | :--------------------------------------------: |
+| ![log](./img/ash85_log.png)<br /><b>取 0 次 log</b> | ![abs](./img/ash85_abs.png)<br /><b>绝对值</b> |
 
 ## 安装
 
@@ -17,13 +17,13 @@ pip3 install MtxDrawer -U
 ## 运行
 
 ```shell
-mtx-drawer draw-one [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_size <n: int>] <filepath> <-ops <aver | abs | real | log>... >
-mtx-drawer draw [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_size <n: int>] <-ops <aver | abs | real | log>... >
+mtx-drawer draw-one [--force] [--log-times <n: int>] [--mat-size <n: int>] [--block-size <n: int>] <filepath> <-ops <aver | abs | real | log>... >
+mtx-drawer draw [--force] [--log-times <n: int>] [--mat-size <n: int>] [--block-size <n: int>] <-ops <aver | abs | real | log>... >
 ```
 
 ### 解释
 
-1. 第一条命令是为文件`<filepath>`画缩略图 (`filepath`无需是 mtx 文件，但需要能被`scipy.io.mmread`读取)，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log_times`表示画缩略图对像素值取 log 的次数默认为 2，`mat_size`表示缩略图的尺寸（默认是 200 \* 200 的图像），`block_size`直接设置块大小（开启次选项后将覆盖掉`mat_size`参数）。
+1. 第一条命令是为文件`<filepath>`画缩略图 (`filepath`无需是 mtx 文件，但需要能被`scipy.io.mmread`读取)，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log-times`表示画缩略图对像素值取 log 的次数默认为 2，`mat-size`表示缩略图的尺寸（默认是 200 \* 200 的图像），`block-size`直接设置块大小（开启次选项后将覆盖掉`mat-size`参数）。
 2. 第二条命令会递归搜索当前路径下的所有 mtx 文件并绘制缩略图，参数含义与上一条描述一致。
 
 注意: ops 作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
@@ -34,12 +34,12 @@ mtx-drawer draw [--force] [--log_times <n: int>] [--mat_size <n: int>] [--block_
 mtx-drawer --help
 ```
 
-![](https://cos.rhythmlian.cn/ImgBed/1a5f9059ad00e7774379d8a4c44495f7.png)
+![help](https://cos.rhythmlian.cn/ImgBed/1a5f9059ad00e7774379d8a4c44495f7.png)
 
 ### 例子
 
 ```shell
-mtx-drawer draw-one 2.mtx --force --log_times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
+mtx-drawer draw-one 2.mtx --force --log-times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
 mtx-drawer draw-one 2.mtx  -ops aver abs log real # 一次性绘制2.mtx的四种图，log取2次，不强制替换
 mtx-drawer draw --force -ops aver abs log # 绘制当前目录及子目录下的全部mtx文件的三种图，强制替换
 mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全部mtx文件的三种图，不强制替换且log取2次
@@ -59,7 +59,7 @@ mtx-drawer complete
 
 效果：
 
-![](./dist/fig-demo.gif)
+![fig-demo](./dist/fig-demo.gif)
 
 ## 基于 Drawer 类的自定义开发
 
@@ -79,7 +79,7 @@ def myOwnAlgorithm(mat, extern_arg): # 参数命名要符合下表的要求，ma
     return max(abs(max([max(i) for i in mat])), abs(min([min(i) for i in mat])))
 
 
-drawer = Drawer('dist/2.mtx', False, set_log_times=0, force_update=True)
+drawer = Drawer('dist/2.mtx', False, set_log-times=0, force_update=True)
 drawer.call('myOwnAlgorithm', extern_arg=1)
 
 """
@@ -94,8 +94,8 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 | 序号 | 合法参数       | 说明                                               |
 | :--: | -------------- | -------------------------------------------------- |
 |  1   | `has_aver`     | 是否有取平均值选项 => div 是否可用                 |
-|  2   | `log_times`    | 外部设定的取 log 的次数                            |
-|  3   | `mat_size`     | 矩阵行列值较大的属性被分的块数                     |
+|  2   | `log-times`    | 外部设定的取 log 的次数                            |
+|  3   | `mat-size`     | 矩阵行列值较大的属性被分的块数                     |
 |  4   | `mtx`          | 文件的 scipy.sparse.coo\*matrix 对象，未做任何更改 |
 |  5   | `coo_shape`    | mtx 的尺寸                                         |
 |  6   | `coo_data`     | 矩阵的非零元值                                     |
@@ -111,4 +111,4 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 
 ### 现代 IDE 下的提示
 
-![](./img/1.png)
+![IDE](./img/1.png)
