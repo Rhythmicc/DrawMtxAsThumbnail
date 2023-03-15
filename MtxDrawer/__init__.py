@@ -2,6 +2,7 @@ from QuickProject import QproDefaultConsole as console
 from QuickProject import QproInfoString as info_string
 from QuickProject import QproWarnString as warn_string
 from QuickProject import QproErrorString as erro_string
+from QuickProject import QproDefaultStatus as status
 from decimal import getcontext, Decimal, ROUND_HALF_EVEN
 
 name = 'MtxDrawer'

@@ -1,8 +1,8 @@
 from QuickProject.Commander import Commander
-from . import console, info_string
+from . import console, info_string, status
 from .Drawer import Drawer
 
-app = Commander("mtx-drawer", True)
+app = Commander("mtx-drawer")
 rt_path = "./"
 
 
@@ -26,6 +26,7 @@ def draw_one(
     :return:
     """
     try:
+        status("正在处理...").start()
         drawer = Drawer(
             filepath,
             "aver" in ops,
@@ -60,15 +61,14 @@ def draw(
     import os
 
     has_aver = "aver" in ops
-    for rt, sonDirs, sonFiles in os.walk(rt_path, followlinks=True):
-        if not rt.endswith("/"):
-            rt += "/"
+    status("正在遍历...").start()
+    for rt, _, sonFiles in os.walk(rt_path, followlinks=True):
         for file in sonFiles:
             if file.endswith(".mtx"):
                 try:
-                    console.print(info_string, f'正在处理: "{rt + file}"')
+                    console.print(info_string, f'正在处理: "{os.path.join(rt, file)}"')
                     drawer = Drawer(
-                        rt + file,
+                        os.path.join(rt, file),
                         has_aver,
                         force,
                         log_times,
@@ -96,7 +96,7 @@ def update():
     """
     from QuickProject import user_pip, external_exec
 
-    with console.status("正在更新..."):
+    with status("正在更新..."):
         external_exec(f"{user_pip} install -U MtxDrawer")
     console.print(info_string, "更新完成")
 

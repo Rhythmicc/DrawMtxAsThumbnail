@@ -22,17 +22,16 @@ class Drawer:
     @classmethod
     def algorithmWrapper(cls):
         """
-        Drawer 的算法装饰器，已内置 aver, log, real, abs四种算法，
-        您通过此装饰器可以轻松自定义算法，支持直接获取Drawer对象支持的参数，主要包含如下内容，
-        （如自定义算法需要其他参数输入，参数名需要以extern_开头，并需要以extern_xxx=bala的形式赋值）
-
+        Drawer 的算法装饰器, 已内置 aver, log, real, abs四种算法,
+        您通过此装饰器可以轻松自定义算法, 支持直接获取Drawer对象支持的参数, 主要包含如下内容, 
+        (如自定义算法需要其他参数输入, 参数名需要以extern_开头, 并需要以extern_xxx=bala的形式赋值)
         has_aver: 是否有取平均值选项 => div是否可用
 
         log_times: 外部设定的取log的次数
 
         mat_size: 矩阵行列值较大的属性被分的块数
 
-        mtx: 文件的scipy.sparse.coo_matrix对象，未做任何更改
+        mtx: 文件的scipy.sparse.coo_matrix对象, 未做任何更改
 
         coo_shape: mtx的尺寸
 
@@ -42,9 +41,9 @@ class Drawer:
 
         coo_cols: 矩阵的非零元素列索引映射到mat的列值
 
-        mat: 被初始化好的二维画布对象，类型为numpy.array
+        mat: 被初始化好的二维画布对象, 类型为numpy.array
 
-        div: 子矩阵非零元数，只有当has_aver为True时才会有效
+        div: 子矩阵非零元数, 只有当has_aver为True时才会有效
 
         row_size: mat的行数
 
@@ -72,7 +71,6 @@ class Drawer:
             set_log_times: int = 2, set_mat_size: int = 200, set_block_size: int = -1):
         """
         初始化Drawer对象
-
         :param filepath: 矩阵文件路径
         :param has_aver: 是否有取平均值选项
         :param force_update: 是否强制更新图像
@@ -96,9 +94,8 @@ class Drawer:
             = None, None, None, None, None, None, None, None, None, None, None, None, None, None
         self.absVal = 1
 
-    def loadMtx(self, st=None):
-        if st:
-            st.update(status='正在加载矩阵并生成画布')
+    def loadMtx(self):
+        status.update(status='正在加载矩阵并生成画布')
         try:
             self.mtx = coo_matrix(mmread(self.filepath))
         except ValueError:
@@ -146,25 +143,25 @@ class Drawer:
                 self.raw_mat[i[1:]] += i[0]
 
     def call(self, func_name: str, **kw_extern_args):
-        with console.status(f'正在执行: {func_name}') as st:
-            func_name = func_name.strip('_')
-            if func_name not in Drawer.algorithm_func_table:
-                raise KeyError(f"Algorithm '{func_name}' not registered!")
-            analyser = Drawer.algorithm_func_table[func_name]['analyser']
-            algorithm = Drawer.algorithm_func_table[func_name]['func']
-            args_body = {}
-            if self.raw_mat is None:
-                self.loadMtx(st)
-                st.update(f'正在执行: {func_name}')
-            self.mat = self.raw_mat.copy()
-            for arg in analyser.parameters.values():
-                if arg.name in Drawer.valid_parameters:
-                    args_body[arg.name] = getattr(self, arg.name)
-            args_body.update(kw_extern_args)
-            if os.path.exists(self.img_path.format(func_name)) and not self.force_update:
-                return
-            self.absVal = algorithm(**args_body)
-            self.draw(func_name)
+        status.update(f'正在执行: {func_name}')
+        func_name = func_name.strip('_')
+        if func_name not in Drawer.algorithm_func_table:
+            raise KeyError(f"Algorithm '{func_name}' not registered!")
+        analyser = Drawer.algorithm_func_table[func_name]['analyser']
+        algorithm = Drawer.algorithm_func_table[func_name]['func']
+        args_body = {}
+        if self.raw_mat is None:
+            self.loadMtx()
+            status.update(f'正在执行: {func_name}')
+        self.mat = self.raw_mat.copy()
+        for arg in analyser.parameters.values():
+            if arg.name in Drawer.valid_parameters:
+                args_body[arg.name] = getattr(self, arg.name)
+        args_body.update(kw_extern_args)
+        if os.path.exists(self.img_path.format(func_name)) and not self.force_update:
+            return
+        self.absVal = algorithm(**args_body)
+        self.draw(func_name)
 
     def draw(self, suffix: str):
         if self.mat is None:

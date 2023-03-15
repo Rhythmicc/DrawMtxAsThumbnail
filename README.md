@@ -1,5 +1,7 @@
 # Draw Mtx As Thumbnail - 将 Mtx 画为缩略图
 
+![help](https://cos.rhythmlian.cn/ImgBed/7c1919c5bdf49f68cec173f256484c3d.png)
+
 ## 样例
 
 |      ![aver](./img/ash85_aver.png)<br />平均值      |   ![real](./img/ash85_real.png)<br />不处理    |
@@ -14,6 +16,8 @@ pip3 install MtxDrawer -U
 
 自动安装依赖并注册一个命令`mtx-drawer`
 
+【注意】：由于依赖库的版本更新可能导致旧版本不再能运行，请注意保持此工具为最新版本。
+
 ## 运行
 
 ```shell
@@ -27,14 +31,6 @@ mtx-drawer draw [--force] [--log-times <n: int>] [--mat-size <n: int>] [--block-
 2. 第二条命令会递归搜索当前路径下的所有 mtx 文件并绘制缩略图，参数含义与上一条描述一致。
 
 注意: ops 作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
-
-### 获取帮助
-
-```shell
-mtx-drawer --help
-```
-
-![help](https://cos.rhythmlian.cn/ImgBed/1a5f9059ad00e7774379d8a4c44495f7.png)
 
 ### 例子
 
