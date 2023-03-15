@@ -1,9 +1,10 @@
 from QuickProject.Commander import Commander
 from . import console, info_string, status
 from .Drawer import Drawer
+import os
 
 app = Commander("mtx-drawer")
-rt_path = "./"
+rt_path = os.path.abspath(os.getcwd())
 
 
 @app.command()
@@ -26,7 +27,7 @@ def draw_one(
     :return:
     """
     try:
-        status("正在处理...").start()
+        status("处理").start()
         drawer = Drawer(
             filepath,
             "aver" in ops,
@@ -35,6 +36,7 @@ def draw_one(
             set_mat_size=mat_size,
             set_block_size=block_size,
         )
+        status.stop()
     except ValueError:
         return
     for func in ops:
@@ -58,15 +60,13 @@ def draw(
     :param block_size: 设置块大小（此参数设置后将覆盖mat_size）
     :return:
     """
-    import os
-
     has_aver = "aver" in ops
-    status("正在遍历...").start()
+    status("遍历并处理").start()
     for rt, _, sonFiles in os.walk(rt_path, followlinks=True):
         for file in sonFiles:
             if file.endswith(".mtx"):
                 try:
-                    console.print(info_string, f'正在处理: "{os.path.join(rt, file)}"')
+                    console.print(f'{os.path.join(rt, file)}', justify="center")
                     drawer = Drawer(
                         os.path.join(rt, file),
                         has_aver,
@@ -81,10 +81,9 @@ def draw(
                     continue
                 except Exception:
                     console.print_exception()
-                else:
-                    console.print(info_string, "处理完成")
                 finally:
                     console.print("-" * console.width)
+    status.stop()
     console.print(info_string, "处理完成")
     console.print("-" * console.width)
 

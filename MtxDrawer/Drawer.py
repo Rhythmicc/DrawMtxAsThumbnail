@@ -95,7 +95,7 @@ class Drawer:
         self.absVal = 1
 
     def loadMtx(self):
-        status.update(status='正在加载矩阵并生成画布')
+        status.update('加载矩阵')
         try:
             self.mtx = coo_matrix(mmread(self.filepath))
         except ValueError:
@@ -132,6 +132,7 @@ class Drawer:
         self.coo_cols = np.floor(self.mtx.col / self.col_block_sz).astype(np.int)
         self.raw_mat = np.zeros((self.row_size, self.col_size), dtype=float)
 
+        status.update('生成画布')
         if self.has_aver:
             self.div = np.ones((self.row_size, self.col_size), dtype=float)
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
