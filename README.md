@@ -1,6 +1,6 @@
 # Draw Mtx As Thumbnail - 将 Mtx 画为缩略图
 
-![help](https://cos.rhythmlian.cn/ImgBed/7c1919c5bdf49f68cec173f256484c3d.png)
+![help](https://cos.rhythmlian.cn/ImgBed/a9cdf3bef0655d1d6e2563c40069938b.png)
 
 ## 样例
 

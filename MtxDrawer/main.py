@@ -7,6 +7,30 @@ app = Commander("mtx-drawer")
 rt_path = os.path.abspath(os.getcwd())
 
 
+@app.custom_complete("font_color")
+def draw_one():
+    return ["black", "white", "red", "green", "blue", "yellow", "cyan", "magenta"]
+
+@app.custom_complete("img_format")
+def draw_one():
+    return ["svg", "png", "jpg", "jpeg", "bmp", "eps"]
+
+@app.custom_complete("ops")
+def draw_one():
+    return ['abs', 'log', 'aver', 'real']
+
+@app.custom_complete('font_color')
+def draw():
+    return ["black", "white", "red", "green", "blue", "yellow", "cyan", "magenta"]
+
+@app.custom_complete('img_format')
+def draw():
+    return ["svg", "png", "jpg", "jpeg", "bmp", "eps"]
+
+@app.custom_complete('ops')
+def draw():
+    return ['abs', 'log', 'aver', 'real']
+
 @app.command()
 def draw_one(
     filepath: str,

@@ -1,7 +1,7 @@
 {
     "build": "",
     "entry_point": "",
-    "executable": "",
+    "executable": "python3 -m MtxDrawer.main",
     "input_file": "",
     "template_root": "",
     "server_targets": [

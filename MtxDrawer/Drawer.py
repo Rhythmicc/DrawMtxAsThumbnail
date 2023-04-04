@@ -189,8 +189,9 @@ class Drawer:
         )
         plt.tick_params(axis='x', colors=self.font_color)
         plt.tick_params(axis='y', colors=self.font_color)
-        plt.colorbar()
-        fig.savefig(self.img_path.format(suffix), format=self.img_format, transparent=True)
+        bar = plt.colorbar()
+        bar.ax.tick_params(labelcolor=self.font_color)
+        fig.savefig(self.img_path.format(suffix), format=self.img_format, transparent=True, dpi=300)
         plt.close(fig)
 
 
