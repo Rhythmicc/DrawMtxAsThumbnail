@@ -68,7 +68,7 @@ class Drawer:
 
     def __init__(
             self, filepath: str, has_aver: bool, force_update: bool = False,
-            set_log_times: int = 2, set_mat_size: int = 200, set_block_size: int = -1):
+            set_log_times: int = 2, set_mat_size: int = 200, set_block_size: int = -1, img_format: str = 'svg'):
         """
         初始化Drawer对象
         :param filepath: 矩阵文件路径
@@ -78,11 +78,12 @@ class Drawer:
         :param set_mat_size: 缩略图尺寸
         :param set_block_size: 设置块大小（此参数设置后将覆盖set_mat_size）
         """
+        self.img_format = img_format
         self.filepath = filepath
         self.force_update = force_update
         self.has_aver = has_aver
         self.img_path = filepath.split('.')
-        self.img_path = '.'.join(self.img_path[:-1]) + '_{}' + '.svg'
+        self.img_path = '.'.join(self.img_path[:-1]) + '_{}' + f'.{img_format}'
         self.log_times = set_log_times
         console.print(info_string, f'路径模板: "{self.img_path}"')
 
@@ -128,8 +129,8 @@ class Drawer:
                 self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
 
         self.coo_data = self.mtx.data
-        self.coo_rows = np.floor(self.mtx.row / self.row_block_sz).astype(np.int)
-        self.coo_cols = np.floor(self.mtx.col / self.col_block_sz).astype(np.int)
+        self.coo_rows = np.floor(self.mtx.row / self.row_block_sz).astype(np.int32)
+        self.coo_cols = np.floor(self.mtx.col / self.col_block_sz).astype(np.int32)
         self.raw_mat = np.zeros((self.row_size, self.col_size), dtype=float)
 
         status.update('生成画布')
@@ -186,7 +187,7 @@ class Drawer:
         # plt.tick_params(axis='x', colors='white')
         # plt.tick_params(axis='y', colors='white')
         plt.colorbar()
-        fig.savefig(self.img_path.format(suffix), format='svg', transparent=True)
+        fig.savefig(self.img_path.format(suffix), format=self.img_format, transparent=True)
         plt.close(fig)
 
 

@@ -15,6 +15,7 @@ def draw_one(
     log_times: int = 2,
     mat_size: int = 200,
     block_size: int = -1,
+    img_format: str = "svg",
 ):
     """
     单个文件处理
@@ -35,6 +36,7 @@ def draw_one(
             log_times,
             set_mat_size=mat_size,
             set_block_size=block_size,
+            img_format=img_format,
         )
         status.stop()
     except ValueError:
@@ -50,6 +52,7 @@ def draw(
     log_times: int = 2,
     mat_size: int = 200,
     block_size: int = -1,
+    img_format: str = "svg",
 ):
     """
     多个文件处理
@@ -74,6 +77,7 @@ def draw(
                         log_times,
                         set_mat_size=mat_size,
                         set_block_size=block_size,
+                        img_format=img_format,
                     )
                     for func in ops:
                         drawer.call(func)
