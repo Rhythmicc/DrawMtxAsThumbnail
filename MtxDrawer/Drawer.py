@@ -68,7 +68,7 @@ class Drawer:
 
     def __init__(
             self, filepath: str, has_aver: bool, force_update: bool = False,
-            set_log_times: int = 2, set_mat_size: int = 200, set_block_size: int = -1, img_format: str = 'svg'):
+            set_log_times: int = 2, set_mat_size: int = 200, set_block_size: int = -1, img_format: str = 'svg', font_color: str = 'black'):
         """
         初始化Drawer对象
         :param filepath: 矩阵文件路径
@@ -77,8 +77,11 @@ class Drawer:
         :param set_log_times: 取log的次数
         :param set_mat_size: 缩略图尺寸
         :param set_block_size: 设置块大小（此参数设置后将覆盖set_mat_size）
+        :param img_format: 图像格式
+        :param font_color: 字体颜色
         """
         self.img_format = img_format
+        self.font_color = font_color
         self.filepath = filepath
         self.force_update = force_update
         self.has_aver = has_aver
@@ -184,8 +187,8 @@ class Drawer:
             ticks=self.y_ticks,
             labels=[int(i * self.col_block_sz) for i in self.y_ticks[:-1]] + [self.coo_shape[0]]
         )
-        # plt.tick_params(axis='x', colors='white')
-        # plt.tick_params(axis='y', colors='white')
+        plt.tick_params(axis='x', colors=self.font_color)
+        plt.tick_params(axis='y', colors=self.font_color)
         plt.colorbar()
         fig.savefig(self.img_path.format(suffix), format=self.img_format, transparent=True)
         plt.close(fig)

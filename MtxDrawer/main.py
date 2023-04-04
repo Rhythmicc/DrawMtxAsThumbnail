@@ -16,6 +16,7 @@ def draw_one(
     mat_size: int = 200,
     block_size: int = -1,
     img_format: str = "svg",
+    font_color: str = "black",
 ):
     """
     单个文件处理
@@ -25,6 +26,8 @@ def draw_one(
     :param log_times: 取log次数
     :param mat_size: 缩略图尺寸
     :param block_size: 设置块大小（此参数设置后将覆盖mat_size）
+    :param img_format: 图片格式
+    :param font_color: 字体颜色
     :return:
     """
     try:
@@ -37,6 +40,7 @@ def draw_one(
             set_mat_size=mat_size,
             set_block_size=block_size,
             img_format=img_format,
+            font_color=font_color,
         )
         status.stop()
     except ValueError:
@@ -53,6 +57,7 @@ def draw(
     mat_size: int = 200,
     block_size: int = -1,
     img_format: str = "svg",
+    font_color: str = "black",
 ):
     """
     多个文件处理
@@ -78,6 +83,7 @@ def draw(
                         set_mat_size=mat_size,
                         set_block_size=block_size,
                         img_format=img_format,
+                        font_color=font_color,
                     )
                     for func in ops:
                         drawer.call(func)
