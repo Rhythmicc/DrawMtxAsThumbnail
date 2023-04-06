@@ -41,6 +41,7 @@ def draw_one(
     block_size: int = -1,
     img_format: str = "svg",
     font_color: str = "black",
+    show_in_console: bool = False,
 ):
     """
     单个文件处理
@@ -52,6 +53,7 @@ def draw_one(
     :param block_size: 设置块大小（此参数设置后将覆盖mat_size）
     :param img_format: 图片格式
     :param font_color: 字体颜色
+    :param show_in_console: 是否在控制台显示图像, 如果为True则不会保存图像
     :return:
     """
     try:
@@ -65,6 +67,7 @@ def draw_one(
             set_block_size=block_size,
             img_format=img_format,
             font_color=font_color,
+            show_in_console=show_in_console,
         )
         status.stop()
     except ValueError:
