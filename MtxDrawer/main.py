@@ -56,8 +56,8 @@ def draw_one(
     :param show_in_console: 是否在控制台显示图像, 如果为True则不会保存图像
     :return:
     """
+    status("处理").start()
     try:
-        status("处理").start()
         drawer = Drawer(
             filepath,
             "aver" in ops,
@@ -69,11 +69,11 @@ def draw_one(
             font_color=font_color,
             show_in_console=show_in_console,
         )
-        status.stop()
     except ValueError:
         return
     for func in ops:
         drawer.call(func)
+    status.stop()
 
 
 @app.command()

@@ -212,7 +212,7 @@ class Drawer:
                 self.raw_mat[i[1:]] += i[0]
 
     def call(self, func_name: str, **kw_extern_args):
-        status.update(f"正在执行: {func_name}")
+        status(f"正在执行: {func_name}").start()
         func_name = func_name.strip("_")
         if func_name not in Drawer.algorithm_func_table:
             raise KeyError(f"Algorithm '{func_name}' not registered!")
@@ -221,7 +221,7 @@ class Drawer:
         args_body = {}
         if self.raw_mat is None:
             self.loadMtx()
-            status.update(f"正在执行: {func_name}")
+            status(f"正在执行: {func_name}")
         self.mat = self.raw_mat.copy()
         for arg in analyser.parameters.values():
             if arg.name in Drawer.valid_parameters:
@@ -266,7 +266,6 @@ class Drawer:
                 dpi=300,
             )
         else:
-            from QuickStart_Rhy.ImageTools.ImagePreview import image_preview
             requirePackage('QuickStart_Rhy.ImageTools.ImagePreview', 'image_preview', 'QuickStart_Rhy')(fig)
         plt.close(fig)
 
