@@ -1,8 +1,18 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+from Cython.Build import cythonize
+import numpy
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-VERSION = "0.0.15"
+VERSION = "0.0.16"
+
+module = Extension(
+    "MtxDrawer.MtxReader",
+    sources=["MatGen/MatGen.pyx", "MatGen/_MatGen.c"],
+    include_dirs=[numpy.get_include()],
+    language="c",
+    language_level=3,
+)
 
 setup(
     name='MtxDrawer',
@@ -22,6 +32,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=True,
+    ext_modules=cythonize(module),
     install_requires=['numpy', 'scipy', 'matplotlib', 'Qpro'],
     entry_points={
         'console_scripts': [

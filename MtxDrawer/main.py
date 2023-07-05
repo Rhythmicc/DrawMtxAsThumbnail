@@ -45,6 +45,7 @@ def draw_one(
 ):
     """
     单个文件处理
+
     :param filepath: 文件路径
     :param ops: 操作列表
     :param force: 是否强制更新
@@ -88,6 +89,7 @@ def draw(
 ):
     """
     多个文件处理
+    
     :param ops: 操作列表
     :param force: 是否强制更新
     :param log_times: 取log次数

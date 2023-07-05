@@ -210,7 +210,31 @@ class Drawer:
         else:
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
-
+    
+    def loadMtx_streaming(self):
+        status.update("加载矩阵并更新画布")
+        
+        from .MtxReader import mat_gen
+        
+        info = mat_gen(self.filepath, int(self.block_sz), int(self.mat_size), 1 if self.has_aver else 0)
+        """
+        rows, cols -> coo shape
+        trows, tcols -> mat shape
+        raw_mat -> raw_mat
+        div_mat -> div
+        """
+        self.row_size = info['trows']
+        self.col_size = info['tcols']
+        self.row_block_sz = info['rows'] / self.row_size
+        self.col_block_sz = info['cols'] / self.col_size
+        self.coo_shape = (info['rows'], info['cols'])
+        self.raw_mat = info['raw_mat']
+        if self.has_aver:
+            self.div = info['div_mat']
+        
+        self.x_ticks = np.linspace(0, self.col_size, 4)
+        self.y_ticks = np.linspace(0, self.row_size, 4)
+        
     def call(self, func_name: str, **kw_extern_args):
         status(f"正在执行: {func_name}").start()
         func_name = func_name.strip("_")
@@ -220,8 +244,9 @@ class Drawer:
         algorithm = Drawer.algorithm_func_table[func_name]["func"]
         args_body = {}
         if self.raw_mat is None:
-            self.loadMtx()
-            status(f"正在执行: {func_name}")
+            from QuickProject.__config__ import system
+            self.loadMtx_streaming() if system == 'darwin' else self.loadMtx() # macos下使用流式加载
+        status(f"正在执行: {func_name}")
         self.mat = self.raw_mat.copy()
         for arg in analyser.parameters.values():
             if arg.name in Drawer.valid_parameters:
