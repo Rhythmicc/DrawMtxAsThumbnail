@@ -8,7 +8,17 @@
 | :-------------------------------------------------: | :--------------------------------------------: |
 | ![log](./img/ash85_log.png)<br /><b>取 0 次 log</b> | ![abs](./img/ash85_abs.png)<br /><b>绝对值</b> |
 
-## 预发布版本: Cython优化
+## 安装
+
+```shell
+pip3 install MtxDrawer -U
+```
+
+自动安装依赖并注册一个命令`mtx-drawer`
+
+【注意】：由于依赖库的版本更新可能导致旧版本不再能运行，请注意保持此工具为最新版本。
+
+## 🔥预发布版本: Cython优化
 
 自行实现的高性能读取算法：
 
@@ -26,18 +36,6 @@ PS：能跑满大多数机械硬盘的带宽，但相比我这个移动硬盘的
 pip3 install cython # 首先要有cython环境
 pip3 install git+https://github.com/Rhythmicc/DrawMtxAsThumbnail.git -U
 ```
-
-
-
-## 安装
-
-```shell
-pip3 install MtxDrawer -U
-```
-
-自动安装依赖并注册一个命令`mtx-drawer`
-
-【注意】：由于依赖库的版本更新可能导致旧版本不再能运行，请注意保持此工具为最新版本。
 
 ## 运行
 
