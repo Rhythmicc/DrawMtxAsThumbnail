@@ -244,8 +244,7 @@ class Drawer:
         algorithm = Drawer.algorithm_func_table[func_name]["func"]
         args_body = {}
         if self.raw_mat is None:
-            from QuickProject.__config__ import system
-            self.loadMtx_streaming() if system == 'darwin' else self.loadMtx() # macos下使用流式加载
+            self.loadMtx_streaming()
         status(f"正在执行: {func_name}")
         self.mat = self.raw_mat.copy()
         for arg in analyser.parameters.values():

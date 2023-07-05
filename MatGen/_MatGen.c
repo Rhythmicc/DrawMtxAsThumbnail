@@ -603,9 +603,23 @@ static ThumbnailMatrix mat_gen_impl(const char* filepath, int block_sz, int mat_
         return res;
     }
 
+    if (madvise(file_data, sb.st_size, MADV_SEQUENTIAL) == -1) {
+        perror("madvise");
+        munmap(file_data, sb.st_size);
+        close(fd);
+        return res;
+    }
+
+    if (madvise(file_data, sb.st_size, MADV_WILLNEED) == -1) {
+        perror("madvise");
+        munmap(file_data, sb.st_size);
+        close(fd);
+        return res;
+    }
+
     FILE* fp = fopen(filepath, "r");
     if (fp == NULL) {
-        perror("fmemopen");
+        perror("fopen");
         munmap(file_data, sb.st_size);
         close(fd);
         return res;
@@ -659,9 +673,7 @@ static ThumbnailMatrix mat_gen_impl(const char* filepath, int block_sz, int mat_
     double val, val_im;
     int is_one_based = 1;
 
-    double*raw_mat = (double*)malloc(sizeof(double) * res.trows * res.tcols);
-    memset(raw_mat, 0, sizeof(double) * res.trows * res.tcols);
-
+    double*raw_mat = (double*)calloc(res.trows * res.tcols, sizeof(double));
 
     int*div_mat = NULL;
     if (using_div) {

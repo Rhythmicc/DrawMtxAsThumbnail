@@ -53,10 +53,6 @@ mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全
 mtx-drawer complete
 ```
 
-效果：
-
-![fig-demo](./dist/fig-demo.gif)
-
 ## 基于 Drawer 类的自定义开发
 
 当默认提供的四种算法无法满足需要时，可以按如下方式自行设计算法：
@@ -108,3 +104,19 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 ### 现代 IDE 下的提示
 
 ![IDE](./img/1.png)
+
+### Cython自定义算子优化
+
+自行实现的高性能读取算法，不仅对内存空间的需求降低至几乎没有，还能加速读取：
+
+![](./img/2.png)
+
+PS：能跑满大多数机械硬盘的带宽，但相比我这个移动硬盘的带宽（峰值2.9GB/s）还是慢了很多。如果大伙儿有更吊的读文件方法还请不吝赐教～
+
+此功能已预先发布，可以通过如下方式安装：
+
+```sh
+pip3 install cython # 首先要有cython环境
+pip3 install git+https://github.com/Rhythmicc/DrawMtxAsThumbnail.git -U
+```
+
