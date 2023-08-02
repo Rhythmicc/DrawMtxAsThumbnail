@@ -12,6 +12,9 @@
 #define MatrixMarketBanner "%%MatrixMarket"
 #define MM_MAX_TOKEN_LENGTH 64
 
+#define max(a,b) ((a)>(b)?(a):(b))
+#define min(a,b) ((a)<(b)?(a):(b))
+
 typedef char MM_typecode[4];
 
 /********************* MM_typecode query fucntions ***************************/
@@ -170,7 +173,7 @@ static char *mm_typecode_to_str(MM_typecode matcode)
 }
 
 static int mm_read_mtx_crd(char *fname, int *M, int *N, int *nz, int **I, int **J,
-                    double **val, MM_typecode *matcode)
+                           double **val, MM_typecode *matcode)
 {
     int ret_code;
     FILE *f;
@@ -405,7 +408,7 @@ static int mm_is_valid(MM_typecode matcode) /* too complex for a macro */
 /*  high level routines */
 
 static int mm_write_mtx_crd(char fname[], int M, int N, int nz, int I[], int J[],
-                     double val[], MM_typecode matcode)
+                            double val[], MM_typecode matcode)
 {
     FILE *f;
     int i;
@@ -447,7 +450,7 @@ static int mm_write_mtx_crd(char fname[], int M, int N, int nz, int I[], int J[]
 }
 
 static int mm_read_mtx_crd_data(FILE *f, int M, int N, int nz, int I[], int J[],
-                         double val[], MM_typecode matcode)
+                                double val[], MM_typecode matcode)
 {
     int i;
     if (mm_is_complex(matcode))
@@ -478,7 +481,7 @@ static int mm_read_mtx_crd_data(FILE *f, int M, int N, int nz, int I[], int J[],
 }
 
 static int mm_read_mtx_crd_entry(FILE *f, int *I, int *J, double *real, double *imag,
-                          MM_typecode matcode)
+                                 MM_typecode matcode)
 {
     if (mm_is_complex(matcode))
     {
@@ -503,7 +506,7 @@ static int mm_read_mtx_crd_entry(FILE *f, int *I, int *J, double *real, double *
 }
 
 static int mm_read_unsymmetric_sparse(const char *fname, int *M_, int *N_, int *nz_,
-                               double **val_, int **I_, int **J_)
+                                      double **val_, int **I_, int **J_)
 {
     FILE *f;
     MM_typecode matcode;
@@ -574,71 +577,89 @@ typedef struct
     int trows;
     int tcols;
     double *raw_mat;
+    double real_max_value;
+    double real_min_value;
     int *div_mat;
 } ThumbnailMatrix;
 
-static ThumbnailMatrix mat_gen_impl(const char* filepath, int block_sz, int mat_sz, int using_div) {
+static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_sz, int using_div)
+{
     ThumbnailMatrix res;
     memset(&res, 0, sizeof(ThumbnailMatrix));
     res.raw_mat = NULL;
     res.div_mat = NULL;
+    res.real_max_value = 0;
+    res.real_min_value = 0;
 
     int isInteger = 0, isReal = 0, isPattern = 0, isSymmetric_tmp = 0, isComplex = 0, m, n, nnz;
     MM_typecode matcode;
 
     int fd = open(filepath, O_RDONLY);
-    if (fd == -1) return res;
+    if (fd == -1)
+        return res;
 
     struct stat sb;
-    if (fstat(fd, &sb) == -1) {
+    if (fstat(fd, &sb) == -1)
+    {
         perror("fstat");
         close(fd);
         return res;
     }
 
-    char* file_data = (char*)mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
-    if (file_data == MAP_FAILED) {
+    char *file_data = (char *)mmap(NULL, sb.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    if (file_data == MAP_FAILED)
+    {
         perror("mmap");
         close(fd);
         return res;
     }
 
-    if (madvise(file_data, sb.st_size, MADV_SEQUENTIAL) == -1) {
+    if (madvise(file_data, sb.st_size, MADV_SEQUENTIAL) == -1)
+    {
         perror("madvise");
         munmap(file_data, sb.st_size);
         close(fd);
         return res;
     }
 
-    if (madvise(file_data, sb.st_size, MADV_WILLNEED) == -1) {
+    if (madvise(file_data, sb.st_size, MADV_WILLNEED) == -1)
+    {
         perror("madvise");
         munmap(file_data, sb.st_size);
         close(fd);
         return res;
     }
 
-    FILE* fp = fopen(filepath, "r");
-    if (fp == NULL) {
+    FILE *fp = fopen(filepath, "r");
+    if (fp == NULL)
+    {
         perror("fopen");
         munmap(file_data, sb.st_size);
         close(fd);
         return res;
     }
 
-    if (mm_read_banner(fp, &matcode) != 0) {
+    if (mm_read_banner(fp, &matcode) != 0)
+    {
         printf("Could not process Matrix Market banner.\n");
         fclose(fp);
         return res;
     }
 
-    if (mm_is_pattern(matcode)) isPattern = 1;
-    if (mm_is_real(matcode)) isReal = 1;
-    if (mm_is_complex(matcode)) isComplex = 1;
-    if (mm_is_integer(matcode)) isInteger = 1;
-    if (mm_is_symmetric(matcode) || mm_is_hermitian(matcode)) isSymmetric_tmp = 1;
+    if (mm_is_pattern(matcode))
+        isPattern = 1;
+    if (mm_is_real(matcode))
+        isReal = 1;
+    if (mm_is_complex(matcode))
+        isComplex = 1;
+    if (mm_is_integer(matcode))
+        isInteger = 1;
+    if (mm_is_symmetric(matcode) || mm_is_hermitian(matcode))
+        isSymmetric_tmp = 1;
 
     // Read matrix dimensions and number of non-zeros
-    if (mm_read_mtx_crd_size(fp, &m, &n, &nnz) != 0) {
+    if (mm_read_mtx_crd_size(fp, &m, &n, &nnz) != 0)
+    {
         printf("Could not read matrix dimensions.\n");
         fclose(fp);
         return res;
@@ -648,19 +669,25 @@ static ThumbnailMatrix mat_gen_impl(const char* filepath, int block_sz, int mat_
     res.rows = m;
     res.cols = n;
 
-    if (block_sz > 0) {
+    if (block_sz > 0)
+    {
         res.trows = (m + block_sz - 1) / block_sz;
         res.tcols = (n + block_sz - 1) / block_sz;
         row_block_sz = col_block_sz = block_sz;
-    } else {
+    }
+    else
+    {
         int mat_size = mat_sz;
-        if (m >= n) {
+        if (m >= n)
+        {
             double rate = (double)n / m;
             res.trows = mat_size;
             res.tcols = ceil(mat_size * rate);
             row_block_sz = m * 1.0 / res.trows;
             col_block_sz = n * 1.0 / res.tcols;
-        } else {
+        }
+        else
+        {
             double rate = (double)m / n;
             res.tcols = mat_size;
             res.trows = ceil(mat_size * rate);
@@ -673,26 +700,34 @@ static ThumbnailMatrix mat_gen_impl(const char* filepath, int block_sz, int mat_
     double val, val_im;
     int is_one_based = 1;
 
-    double*raw_mat = (double*)calloc(res.trows * res.tcols, sizeof(double));
+    double *raw_mat = (double *)calloc(res.trows * res.tcols, sizeof(double));
 
-    int*div_mat = NULL;
-    if (using_div) {
-        div_mat = (int*)malloc(sizeof(int) * res.trows * res.tcols);
-        for (int i = 0; i < res.trows * res.tcols; ++i) div_mat[i] = 1;
+    int *div_mat = NULL;
+    if (using_div)
+    {
+        div_mat = (int *)malloc(sizeof(int) * res.trows * res.tcols);
+        for (int i = 0; i < res.trows * res.tcols; ++i)
+            div_mat[i] = 1;
     }
 
     char line[MM_MAX_LINE_LENGTH];
-    for (int index = 0; index < nnz; ++index) {
-        if (fgets(line, sizeof(line), fp) != NULL) {
-            if (isPattern)
+    for (int index = 0; index < nnz; ++index)
+    {
+        if (fgets(line, sizeof(line), fp) != NULL)
+        {   
+            if (isPattern) {
                 sscanf(line, "%d%d", &ia, &ja);
+                val = 1;
+            }
             else if (isReal || isInteger)
-                sscanf(line, "%d%d%lg", &ia, &ja, &val);
+                sscanf(line, "%d%d%lf", &ia, &ja, &val);
             else if (isComplex)
-                sscanf(line, "%d%d%lg%lg", &ia, &ja, &val, &val_im);
+                sscanf(line, "%d%d%lf%lf", &ia, &ja, &val, &val_im);
 
-            if (is_one_based && (ia == 0 || ja == 0)) is_one_based = 0;
-            if (is_one_based) {
+            if (is_one_based && (ia == 0 || ja == 0))
+                is_one_based = 0;
+            if (is_one_based)
+            {
                 --ia;
                 --ja;
             }
@@ -700,14 +735,22 @@ static ThumbnailMatrix mat_gen_impl(const char* filepath, int block_sz, int mat_
             int row = ia / row_block_sz;
             int col = ja / col_block_sz;
 
-            raw_mat[row * res.tcols + col] += 1;
-            if (using_div) {
+            raw_mat[row * res.tcols + col] += val;
+            if (index) {
+                res.real_max_value = max(res.real_max_value, val);
+                res.real_min_value = min(res.real_min_value, val);
+            } else res.real_max_value = res.real_min_value = val;
+
+            if (using_div)
+            {
                 div_mat[row * res.tcols + col] += 1;
             }
 
-            if (isSymmetric_tmp && ia != ja) {
-                raw_mat[col * res.tcols + row] += 1;
-                if (using_div) {
+            if (isSymmetric_tmp && ia != ja)
+            {
+                raw_mat[col * res.tcols + row] += val;
+                if (using_div)
+                {
                     div_mat[col * res.tcols + row] += 1;
                 }
             }

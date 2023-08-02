@@ -1887,6 +1887,8 @@ static const char __pyx_k_file_path[] = "file_path";
 static const char __pyx_k_using_div[] = "using_div";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_ImportError[] = "ImportError";
+static const char __pyx_k_real_max_value[] = "real_max_value";
+static const char __pyx_k_real_min_value[] = "real_min_value";
 static const char __pyx_k_MatGen_MatGen_pyx[] = "MatGen/MatGen.pyx";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
 static const char __pyx_k_MtxDrawer_MtxReader[] = "MtxDrawer.MtxReader";
@@ -1918,6 +1920,8 @@ static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
 static PyObject *__pyx_n_s_raw_mat;
+static PyObject *__pyx_n_s_real_max_value;
+static PyObject *__pyx_n_s_real_min_value;
 static PyObject *__pyx_n_s_rows;
 static PyObject *__pyx_n_s_tcols;
 static PyObject *__pyx_n_s_test;
@@ -1932,7 +1936,7 @@ static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_codeobj__4;
 /* Late includes */
 
-/* "MatGen/MatGen.pyx":22
+/* "MatGen/MatGen.pyx":24
  *     ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
  * 
  * def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):             # <<<<<<<<<<<<<<
@@ -1982,23 +1986,23 @@ static PyObject *__pyx_pw_9MtxDrawer_9MtxReader_1mat_gen(PyObject *__pyx_self, P
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_block_sz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, 1); __PYX_ERR(0, 22, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, 1); __PYX_ERR(0, 24, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_mat_sz)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, 2); __PYX_ERR(0, 22, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, 2); __PYX_ERR(0, 24, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_using_div)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, 3); __PYX_ERR(0, 22, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, 3); __PYX_ERR(0, 24, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "mat_gen") < 0)) __PYX_ERR(0, 22, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "mat_gen") < 0)) __PYX_ERR(0, 24, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -2009,19 +2013,19 @@ static PyObject *__pyx_pw_9MtxDrawer_9MtxReader_1mat_gen(PyObject *__pyx_self, P
       values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
     }
     __pyx_v_file_path = ((PyObject*)values[0]);
-    __pyx_v_block_sz = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_block_sz == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
-    __pyx_v_mat_sz = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_mat_sz == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
-    __pyx_v_using_div = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_using_div == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L3_error)
+    __pyx_v_block_sz = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_block_sz == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
+    __pyx_v_mat_sz = __Pyx_PyInt_As_int(values[2]); if (unlikely((__pyx_v_mat_sz == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
+    __pyx_v_using_div = __Pyx_PyInt_As_int(values[3]); if (unlikely((__pyx_v_using_div == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 22, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("mat_gen", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 24, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("MtxDrawer.MtxReader.mat_gen", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_file_path), (&PyString_Type), 1, "file_path", 1))) __PYX_ERR(0, 22, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_file_path), (&PyString_Type), 1, "file_path", 1))) __PYX_ERR(0, 24, __pyx_L1_error)
   __pyx_r = __pyx_pf_9MtxDrawer_9MtxReader_mat_gen(__pyx_self, __pyx_v_file_path, __pyx_v_block_sz, __pyx_v_mat_sz, __pyx_v_using_div);
 
   /* function exit code */
@@ -2068,20 +2072,20 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   __pyx_pybuffernd_div_mat.data = NULL;
   __pyx_pybuffernd_div_mat.rcbuffer = &__pyx_pybuffer_div_mat;
 
-  /* "MatGen/MatGen.pyx":26
+  /* "MatGen/MatGen.pyx":28
  *     Read matrix from file_path and return a dense matrix.
  *     """
  *     cdef ThumbnailMatrix mat = mat_gen_impl(file_path.encode('utf-8'), block_sz, mat_sz, using_div)             # <<<<<<<<<<<<<<
  *     cdef cnp.ndarray[cnp.double_t, ndim=2] raw_mat
  *     cdef cnp.ndarray[cnp.int_t, ndim=2] div_mat
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_file_path, __pyx_kp_s_utf_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PyString_Type_encode, __pyx_v_file_path, __pyx_kp_s_utf_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_AsString(__pyx_t_1); if (unlikely((!__pyx_t_2) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
   __pyx_v_mat = mat_gen_impl(__pyx_t_2, __pyx_v_block_sz, __pyx_v_mat_sz, __pyx_v_using_div);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "MatGen/MatGen.pyx":29
+  /* "MatGen/MatGen.pyx":31
  *     cdef cnp.ndarray[cnp.double_t, ndim=2] raw_mat
  *     cdef cnp.ndarray[cnp.int_t, ndim=2] div_mat
  *     if mat.raw_mat == NULL:             # <<<<<<<<<<<<<<
@@ -2091,14 +2095,14 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   __pyx_t_3 = ((__pyx_v_mat.raw_mat == NULL) != 0);
   if (unlikely(__pyx_t_3)) {
 
-    /* "MatGen/MatGen.pyx":30
+    /* "MatGen/MatGen.pyx":32
  *     cdef cnp.ndarray[cnp.int_t, ndim=2] div_mat
  *     if mat.raw_mat == NULL:
  *         raise ValueError("Cannot read matrix from file: {}".format(file_path))             # <<<<<<<<<<<<<<
  *     cdef npy_intp dims[2]
  *     dims[0] = mat.trows
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Cannot_read_matrix_from_file, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Cannot_read_matrix_from_file, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 32, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -2112,17 +2116,17 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
     }
     __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_v_file_path) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_file_path);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_ValueError, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 30, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_builtin_ValueError, __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 32, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 30, __pyx_L1_error)
+    __PYX_ERR(0, 32, __pyx_L1_error)
 
-    /* "MatGen/MatGen.pyx":29
+    /* "MatGen/MatGen.pyx":31
  *     cdef cnp.ndarray[cnp.double_t, ndim=2] raw_mat
  *     cdef cnp.ndarray[cnp.int_t, ndim=2] div_mat
  *     if mat.raw_mat == NULL:             # <<<<<<<<<<<<<<
@@ -2131,7 +2135,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  */
   }
 
-  /* "MatGen/MatGen.pyx":32
+  /* "MatGen/MatGen.pyx":34
  *         raise ValueError("Cannot read matrix from file: {}".format(file_path))
  *     cdef npy_intp dims[2]
  *     dims[0] = mat.trows             # <<<<<<<<<<<<<<
@@ -2141,7 +2145,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   __pyx_t_6 = __pyx_v_mat.trows;
   (__pyx_v_dims[0]) = __pyx_t_6;
 
-  /* "MatGen/MatGen.pyx":33
+  /* "MatGen/MatGen.pyx":35
  *     cdef npy_intp dims[2]
  *     dims[0] = mat.trows
  *     dims[1] = mat.tcols             # <<<<<<<<<<<<<<
@@ -2151,16 +2155,16 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   __pyx_t_6 = __pyx_v_mat.tcols;
   (__pyx_v_dims[1]) = __pyx_t_6;
 
-  /* "MatGen/MatGen.pyx":34
+  /* "MatGen/MatGen.pyx":36
  *     dims[0] = mat.trows
  *     dims[1] = mat.tcols
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()             # <<<<<<<<<<<<<<
  *     free(mat.raw_mat)
  *     if using_div:
  */
-  __pyx_t_1 = PyArray_SimpleNewFromData(2, __pyx_v_dims, NPY_DOUBLE, ((void *)__pyx_v_mat.raw_mat)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_1 = PyArray_SimpleNewFromData(2, __pyx_v_dims, NPY_DOUBLE, ((void *)__pyx_v_mat.raw_mat)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_copy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_copy); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -2175,10 +2179,10 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   }
   __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 34, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 34, __pyx_L1_error)
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 36, __pyx_L1_error)
   __pyx_t_7 = ((PyArrayObject *)__pyx_t_4);
   {
     __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2195,13 +2199,13 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
       __pyx_t_8 = __pyx_t_9 = __pyx_t_10 = 0;
     }
     __pyx_pybuffernd_raw_mat.diminfo[0].strides = __pyx_pybuffernd_raw_mat.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_raw_mat.diminfo[0].shape = __pyx_pybuffernd_raw_mat.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_raw_mat.diminfo[1].strides = __pyx_pybuffernd_raw_mat.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_raw_mat.diminfo[1].shape = __pyx_pybuffernd_raw_mat.rcbuffer->pybuffer.shape[1];
-    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 34, __pyx_L1_error)
+    if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 36, __pyx_L1_error)
   }
   __pyx_t_7 = 0;
   __pyx_v_raw_mat = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "MatGen/MatGen.pyx":35
+  /* "MatGen/MatGen.pyx":37
  *     dims[1] = mat.tcols
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
  *     free(mat.raw_mat)             # <<<<<<<<<<<<<<
@@ -2210,7 +2214,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  */
   free(__pyx_v_mat.raw_mat);
 
-  /* "MatGen/MatGen.pyx":36
+  /* "MatGen/MatGen.pyx":38
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
  *     free(mat.raw_mat)
  *     if using_div:             # <<<<<<<<<<<<<<
@@ -2220,16 +2224,16 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   __pyx_t_3 = (__pyx_v_using_div != 0);
   if (__pyx_t_3) {
 
-    /* "MatGen/MatGen.pyx":37
+    /* "MatGen/MatGen.pyx":39
  *     free(mat.raw_mat)
  *     if using_div:
  *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()             # <<<<<<<<<<<<<<
  *         free(mat.div_mat)
  *     else:
  */
-    __pyx_t_5 = PyArray_SimpleNewFromData(2, __pyx_v_dims, NPY_INT, ((void *)__pyx_v_mat.div_mat)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 37, __pyx_L1_error)
+    __pyx_t_5 = PyArray_SimpleNewFromData(2, __pyx_v_dims, NPY_INT, ((void *)__pyx_v_mat.div_mat)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_copy); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 37, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_copy); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __pyx_t_5 = NULL;
@@ -2244,10 +2248,10 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
     }
     __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 37, __pyx_L1_error)
+    if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 37, __pyx_L1_error)
+    if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 39, __pyx_L1_error)
     __pyx_t_11 = ((PyArrayObject *)__pyx_t_4);
     {
       __Pyx_BufFmt_StackElem __pyx_stack[1];
@@ -2264,13 +2268,13 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
         __pyx_t_10 = __pyx_t_9 = __pyx_t_8 = 0;
       }
       __pyx_pybuffernd_div_mat.diminfo[0].strides = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_div_mat.diminfo[0].shape = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_div_mat.diminfo[1].strides = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_div_mat.diminfo[1].shape = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.shape[1];
-      if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 37, __pyx_L1_error)
+      if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 39, __pyx_L1_error)
     }
     __pyx_t_11 = 0;
     __pyx_v_div_mat = ((PyArrayObject *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "MatGen/MatGen.pyx":38
+    /* "MatGen/MatGen.pyx":40
  *     if using_div:
  *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()
  *         free(mat.div_mat)             # <<<<<<<<<<<<<<
@@ -2279,7 +2283,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  */
     free(__pyx_v_mat.div_mat);
 
-    /* "MatGen/MatGen.pyx":36
+    /* "MatGen/MatGen.pyx":38
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
  *     free(mat.raw_mat)
  *     if using_div:             # <<<<<<<<<<<<<<
@@ -2289,7 +2293,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
     goto __pyx_L4;
   }
 
-  /* "MatGen/MatGen.pyx":40
+  /* "MatGen/MatGen.pyx":42
  *         free(mat.div_mat)
  *     else:
  *         div_mat = None             # <<<<<<<<<<<<<<
@@ -2313,7 +2317,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
         __pyx_t_8 = __pyx_t_9 = __pyx_t_10 = 0;
       }
       __pyx_pybuffernd_div_mat.diminfo[0].strides = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_div_mat.diminfo[0].shape = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_div_mat.diminfo[1].strides = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_div_mat.diminfo[1].shape = __pyx_pybuffernd_div_mat.rcbuffer->pybuffer.shape[1];
-      if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 40, __pyx_L1_error)
+      if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 42, __pyx_L1_error)
     }
     __pyx_t_11 = 0;
     __Pyx_INCREF(Py_None);
@@ -2321,7 +2325,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
   }
   __pyx_L4:;
 
-  /* "MatGen/MatGen.pyx":42
+  /* "MatGen/MatGen.pyx":44
  *         div_mat = None
  * 
  *     return {             # <<<<<<<<<<<<<<
@@ -2330,77 +2334,101 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  */
   __Pyx_XDECREF(__pyx_r);
 
-  /* "MatGen/MatGen.pyx":43
+  /* "MatGen/MatGen.pyx":45
  * 
  *     return {
  *         "rows": mat.rows,             # <<<<<<<<<<<<<<
  *         "cols": mat.cols,
  *         "trows": mat.trows,
  */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.rows); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.rows); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_rows, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_rows, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "MatGen/MatGen.pyx":44
+  /* "MatGen/MatGen.pyx":46
  *     return {
  *         "rows": mat.rows,
  *         "cols": mat.cols,             # <<<<<<<<<<<<<<
  *         "trows": mat.trows,
  *         "tcols": mat.tcols,
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.cols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 44, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.cols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_cols, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_cols, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "MatGen/MatGen.pyx":45
+  /* "MatGen/MatGen.pyx":47
  *         "rows": mat.rows,
  *         "cols": mat.cols,
  *         "trows": mat.trows,             # <<<<<<<<<<<<<<
  *         "tcols": mat.tcols,
  *         "raw_mat": raw_mat,
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.trows); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.trows); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_trows, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_trows, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "MatGen/MatGen.pyx":46
+  /* "MatGen/MatGen.pyx":48
  *         "cols": mat.cols,
  *         "trows": mat.trows,
  *         "tcols": mat.tcols,             # <<<<<<<<<<<<<<
  *         "raw_mat": raw_mat,
- *         "div_mat": div_mat
+ *         "div_mat": div_mat,
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.tcols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_mat.tcols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_tcols, __pyx_t_1) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_tcols, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "MatGen/MatGen.pyx":47
+  /* "MatGen/MatGen.pyx":49
  *         "trows": mat.trows,
  *         "tcols": mat.tcols,
  *         "raw_mat": raw_mat,             # <<<<<<<<<<<<<<
- *         "div_mat": div_mat
- *     }
+ *         "div_mat": div_mat,
+ *         "real_max_value": mat.real_max_value,
  */
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_raw_mat, ((PyObject *)__pyx_v_raw_mat)) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_raw_mat, ((PyObject *)__pyx_v_raw_mat)) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
 
-  /* "MatGen/MatGen.pyx":48
+  /* "MatGen/MatGen.pyx":50
  *         "tcols": mat.tcols,
  *         "raw_mat": raw_mat,
- *         "div_mat": div_mat             # <<<<<<<<<<<<<<
+ *         "div_mat": div_mat,             # <<<<<<<<<<<<<<
+ *         "real_max_value": mat.real_max_value,
+ *         "real_min_value": mat.real_min_value
+ */
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_div_mat, ((PyObject *)__pyx_v_div_mat)) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+
+  /* "MatGen/MatGen.pyx":51
+ *         "raw_mat": raw_mat,
+ *         "div_mat": div_mat,
+ *         "real_max_value": mat.real_max_value,             # <<<<<<<<<<<<<<
+ *         "real_min_value": mat.real_min_value
  *     }
  */
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_div_mat, ((PyObject *)__pyx_v_div_mat)) < 0) __PYX_ERR(0, 43, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_mat.real_max_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_real_max_value, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "MatGen/MatGen.pyx":52
+ *         "div_mat": div_mat,
+ *         "real_max_value": mat.real_max_value,
+ *         "real_min_value": mat.real_min_value             # <<<<<<<<<<<<<<
+ *     }
+ */
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_mat.real_min_value); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_real_min_value, __pyx_t_1) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_4;
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "MatGen/MatGen.pyx":22
+  /* "MatGen/MatGen.pyx":24
  *     ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
  * 
  * def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):             # <<<<<<<<<<<<<<
@@ -3522,6 +3550,8 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
   {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
   {&__pyx_n_s_raw_mat, __pyx_k_raw_mat, sizeof(__pyx_k_raw_mat), 0, 0, 1, 1},
+  {&__pyx_n_s_real_max_value, __pyx_k_real_max_value, sizeof(__pyx_k_real_max_value), 0, 0, 1, 1},
+  {&__pyx_n_s_real_min_value, __pyx_k_real_min_value, sizeof(__pyx_k_real_min_value), 0, 0, 1, 1},
   {&__pyx_n_s_rows, __pyx_k_rows, sizeof(__pyx_k_rows), 0, 0, 1, 1},
   {&__pyx_n_s_tcols, __pyx_k_tcols, sizeof(__pyx_k_tcols), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
@@ -3531,7 +3561,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 32, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(1, 944, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -3564,17 +3594,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "MatGen/MatGen.pyx":22
+  /* "MatGen/MatGen.pyx":24
  *     ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
  * 
  * def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):             # <<<<<<<<<<<<<<
  *     """
  *     Read matrix from file_path and return a dense matrix.
  */
-  __pyx_tuple__3 = PyTuple_Pack(8, __pyx_n_s_file_path, __pyx_n_s_block_sz, __pyx_n_s_mat_sz, __pyx_n_s_using_div, __pyx_n_s_mat, __pyx_n_s_raw_mat, __pyx_n_s_div_mat, __pyx_n_s_dims); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(8, __pyx_n_s_file_path, __pyx_n_s_block_sz, __pyx_n_s_mat_sz, __pyx_n_s_using_div, __pyx_n_s_mat, __pyx_n_s_raw_mat, __pyx_n_s_div_mat, __pyx_n_s_dims); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
-  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(4, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_MatGen_MatGen_pyx, __pyx_n_s_mat_gen, 22, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_codeobj__4 = (PyObject*)__Pyx_PyCode_New(4, 0, 8, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__3, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_MatGen_MatGen_pyx, __pyx_n_s_mat_gen, 24, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__4)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -3911,16 +3941,16 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_2 == ((int)-1))) __PYX_ERR(0, 10, __pyx_L1_error)
   __pyx_v_9MtxDrawer_9MtxReader__numpy_initialized = __pyx_t_2;
 
-  /* "MatGen/MatGen.pyx":22
+  /* "MatGen/MatGen.pyx":24
  *     ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
  * 
  * def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):             # <<<<<<<<<<<<<<
  *     """
  *     Read matrix from file_path and return a dense matrix.
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9MtxDrawer_9MtxReader_1mat_gen, NULL, __pyx_n_s_MtxDrawer_MtxReader); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_9MtxDrawer_9MtxReader_1mat_gen, NULL, __pyx_n_s_MtxDrawer_MtxReader); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_mat_gen, __pyx_t_1) < 0) __PYX_ERR(0, 22, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_mat_gen, __pyx_t_1) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "MatGen/MatGen.pyx":1

@@ -28,6 +28,8 @@ class Drawer:
         "col_size",
         "row_block_sz",
         "col_block_sz",
+        "real_max_data",
+        "real_min_data"
     }
 
     @classmethod
@@ -46,11 +48,15 @@ class Drawer:
 
         coo_shape: mtx的尺寸
 
-        coo_data: 矩阵的非零元值
+        coo_data: 矩阵的非零元值 (None if using streaming method)
 
-        coo_rows: 矩阵的非零元素行索引映射到mat的行值
+        coo_rows: 矩阵的非零元素行索引映射到mat的行值 (None if using streaming method)
 
-        coo_cols: 矩阵的非零元素列索引映射到mat的列值
+        coo_cols: 矩阵的非零元素列索引映射到mat的列值 (None if using streaming method)
+
+        real_max_value: 矩阵非零元素最大值
+
+        real_min_value: 矩阵非零元素最小值
 
         mat: 被初始化好的二维画布对象, 类型为numpy.array
 
@@ -76,6 +82,7 @@ class Drawer:
                 if arg.name not in Drawer.valid_parameters and not arg.name.startswith(
                     "extern_"
                 ):
+                    console.print(erro_string, f"Not support: \"{arg.name}\"")
                     raise Exception(
                         "Arg must in supported args or startswith 'extern_'"
                     )
@@ -196,6 +203,8 @@ class Drawer:
                 self.y_ticks = np.linspace(0, self.row_size, max(my_round(4 * rate), 2))
 
         self.coo_data = self.mtx.data
+        self.real_max_data = max(self.coo_data)
+        self.real_min_data = min(self.coo_data)
         self.coo_rows = np.floor(self.mtx.row / self.row_block_sz).astype(np.int32)
         self.coo_cols = np.floor(self.mtx.col / self.col_block_sz).astype(np.int32)
         self.raw_mat = np.zeros((self.row_size, self.col_size), dtype=float)
@@ -232,6 +241,8 @@ class Drawer:
         if self.has_aver:
             self.div = info['div_mat']
         
+        self.real_max_data = info['real_max_value']
+        self.real_min_data = info['real_min_value']
         self.x_ticks = np.linspace(0, self.col_size, 4)
         self.y_ticks = np.linspace(0, self.row_size, 4)
         
@@ -308,8 +319,8 @@ def _abs(mat):
 
 
 @Drawer.algorithmWrapper()
-def real(coo_data) -> float:
-    return max(abs(max(coo_data)), abs(min(coo_data)))
+def real(real_max_data, real_min_data) -> float:
+    return max(abs(real_max_data), abs(real_min_data))
 
 
 @Drawer.algorithmWrapper()

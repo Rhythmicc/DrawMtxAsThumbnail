@@ -16,6 +16,8 @@ cdef extern from "_MatGen.c":
         int trows
         int tcols # thumbnail size (trows, tcols)
         double* raw_mat # data of the matrix (trows, tcols)
+        double real_max_value
+        double real_min_value
         int* div_mat    # division matrix (trows, tcols)
     ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
 
@@ -45,5 +47,7 @@ def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):
         "trows": mat.trows,
         "tcols": mat.tcols,
         "raw_mat": raw_mat,
-        "div_mat": div_mat
+        "div_mat": div_mat,
+        "real_max_value": mat.real_max_value,
+        "real_min_value": mat.real_min_value
     }
