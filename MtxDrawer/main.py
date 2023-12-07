@@ -103,7 +103,7 @@ def draw(
         for file in sonFiles:
             if file.endswith(".mtx"):
                 try:
-                    console.print(f'{os.path.join(rt, file)}', justify="center")
+                    console.rule(f'{os.path.join(rt, file)}')
                     drawer = Drawer(
                         os.path.join(rt, file),
                         has_aver,
@@ -120,8 +120,6 @@ def draw(
                     continue
                 except Exception:
                     console.print_exception()
-                finally:
-                    console.print("-" * console.width)
     status.stop()
     console.print(info_string, "处理完成")
     console.print("-" * console.width)

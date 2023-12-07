@@ -4,7 +4,7 @@ import numpy
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-VERSION = "0.0.17"
+VERSION = "0.0.19"
 
 module = Extension(
     "MtxDrawer.MtxReader",
