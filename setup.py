@@ -33,7 +33,7 @@ setup(
     include_package_data=True,
     zip_safe=True,
     ext_modules=cythonize(module),
-    install_requires=['numpy', 'scipy', 'matplotlib', 'Qpro'],
+    install_requires=['numpy', 'matplotlib', 'Qpro'],
     entry_points={
         'console_scripts': [
             'mtx-drawer = MtxDrawer.main:main'

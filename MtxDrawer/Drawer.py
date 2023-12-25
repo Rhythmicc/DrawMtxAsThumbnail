@@ -3,8 +3,6 @@ import math
 from pylab import cm
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.io import mmread
-from scipy.sparse import coo_matrix
 from . import *
 import inspect
 from inspect import isfunction
@@ -29,7 +27,7 @@ class Drawer:
         "row_block_sz",
         "col_block_sz",
         "real_max_data",
-        "real_min_data"
+        "real_min_data",
     }
 
     @classmethod
@@ -82,7 +80,7 @@ class Drawer:
                 if arg.name not in Drawer.valid_parameters and not arg.name.startswith(
                     "extern_"
                 ):
-                    console.print(erro_string, f"Not support: \"{arg.name}\"")
+                    console.print(erro_string, f'Not support: "{arg.name}"')
                     raise Exception(
                         "Arg must in supported args or startswith 'extern_'"
                     )
@@ -172,7 +170,9 @@ class Drawer:
     def loadMtx(self):
         status.update("加载矩阵")
         try:
-            self.mtx = coo_matrix(mmread(self.filepath))
+            self.mtx = requirePackage("scipy.sparse", "coo_matrix")(
+                requirePackage("scipy.io", "mmread")(self.filepath)
+            )
         except ValueError:
             console.print(
                 erro_string, "读取矩阵失败: 可能此文件格式不符合标准Matrix Market格式, 或位置值不以1作为第一个元素"
@@ -221,33 +221,58 @@ class Drawer:
         else:
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
-    
+
     def loadMtx_streaming(self):
         status.update("加载矩阵并更新画布")
-        
+
         from .MtxReader import mat_gen
-        
-        info = mat_gen(self.filepath, int(self.block_sz), int(self.mat_size), 1 if self.has_aver else 0)
+
+        info = mat_gen(
+            self.filepath,
+            int(self.block_sz),
+            int(self.mat_size),
+            1 if self.has_aver else 0,
+        )
         """
         rows, cols -> coo shape
         trows, tcols -> mat shape
         raw_mat -> raw_mat
         div_mat -> div
         """
-        self.row_size = info['trows']
-        self.col_size = info['tcols']
-        self.row_block_sz = info['rows'] / self.row_size
-        self.col_block_sz = info['cols'] / self.col_size
-        self.coo_shape = (info['rows'], info['cols'])
-        self.raw_mat = info['raw_mat']
+        self.row_size = info["trows"]
+        self.col_size = info["tcols"]
+        self.row_block_sz = info["rows"] / self.row_size
+        self.col_block_sz = info["cols"] / self.col_size
+        self.coo_shape = (info["rows"], info["cols"])
+        self.raw_mat = info["raw_mat"]
         if self.has_aver:
-            self.div = info['div_mat']
-        
-        self.real_max_data = info['real_max_value']
-        self.real_min_data = info['real_min_value']
-        self.x_ticks = np.linspace(0, info['cols'], 4, True, dtype=np.int32) if self.tick_step == -1 else np.linspace(0, info['cols'], info['cols'] // self.tick_step + 1, True, dtype=np.int32)
-        self.y_ticks = np.linspace(0, info['rows'], 4, True, dtype=np.int32) if self.tick_step == -1 else np.linspace(0, info['rows'], info['rows'] // self.tick_step + 1, True, dtype=np.int32)
-        
+            self.div = info["div_mat"]
+
+        self.real_max_data = info["real_max_value"]
+        self.real_min_data = info["real_min_value"]
+        self.x_ticks = (
+            np.linspace(0, info["cols"], 4, True, dtype=np.int32)
+            if self.tick_step == -1
+            else np.linspace(
+                0,
+                info["cols"],
+                info["cols"] // self.tick_step + 1,
+                True,
+                dtype=np.int32,
+            )
+        )
+        self.y_ticks = (
+            np.linspace(0, info["rows"], 4, True, dtype=np.int32)
+            if self.tick_step == -1
+            else np.linspace(
+                0,
+                info["rows"],
+                info["rows"] // self.tick_step + 1,
+                True,
+                dtype=np.int32,
+            )
+        )
+
     def call(self, func_name: str, **kw_extern_args):
         status(f"正在执行: {func_name}").start()
         func_name = func_name.strip("_")
@@ -277,7 +302,7 @@ class Drawer:
         fig = plt.figure()
         plt.imshow(
             self.mat,
-            origin='upper',
+            origin="upper",
             cmap="bwr",
             norm=cm.colors.Normalize(vmin=-self.absVal, vmax=self.absVal),
             extent=[0, self.col_size, self.row_size, 0],
@@ -285,7 +310,7 @@ class Drawer:
         plt.xticks(ticks=self.x_ticks)
         plt.yticks(ticks=self.y_ticks)
         if self.tick_step != -1:
-            plt.grid(color='black', linestyle='-', linewidth=1)
+            plt.grid(color="black", linestyle="-", linewidth=1)
         plt.tick_params(axis="x", colors=self.font_color)
         plt.tick_params(axis="y", colors=self.font_color)
         bar = plt.colorbar()
@@ -299,7 +324,11 @@ class Drawer:
                 dpi=300,
             )
         else:
-            requirePackage('QuickStart_Rhy.ImageTools.ImagePreview', 'image_preview', 'QuickStart_Rhy')(fig)
+            requirePackage(
+                "QuickStart_Rhy.ImageTools.ImagePreview",
+                "image_preview",
+                "QuickStart_Rhy",
+            )(fig)
         plt.close(fig)
 
 
