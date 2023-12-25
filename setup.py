@@ -4,11 +4,12 @@ import numpy
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-VERSION = "0.0.19"
+VERSION = "0.0.21"
 
 module = Extension(
     "MtxDrawer.MtxReader",
     sources=["MatGen/MatGen.pyx", "MatGen/_MatGen.c"],
+    extra_compile_args=["-ffast-math", "-mfma"],
     include_dirs=[numpy.get_include()],
     language="c",
     language_level=3,

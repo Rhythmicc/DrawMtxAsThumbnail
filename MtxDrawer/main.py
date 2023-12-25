@@ -84,6 +84,7 @@ def draw(
     log_times: int = 2,
     mat_size: int = 200,
     block_size: int = -1,
+    tick_step: int = -1,
     img_format: str = "svg",
     font_color: str = "black",
 ):
@@ -111,6 +112,7 @@ def draw(
                         log_times,
                         set_mat_size=mat_size,
                         set_block_size=block_size,
+                        set_tick_step=tick_step,
                         img_format=img_format,
                         font_color=font_color,
                     )
