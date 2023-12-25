@@ -16,42 +16,25 @@ pip3 install MtxDrawer -U
 
 自动安装依赖并注册一个命令`mtx-drawer`
 
-【注意】：由于依赖库的版本更新可能导致旧版本不再能运行，请注意保持此工具为最新版本。
+## 子命令与参数
 
-## 🔥预发布版本: Cython优化
+包含两个子命令 `draw-one` 和 `draw`，可以在终端中通过`mtx-drawer`命令查看，二者区别是`draw-one`只会处理一个文件，而`draw`会递归处理当前目录下的所有 mtx 文件。
 
-自行实现的高性能读取算法：
+### 参数
 
-1. 内存需求大幅降低，不再读取整个矩阵处理；
-2. 读取加速，没测过之前的带宽，但肉眼可见的更快；
-3. 兼容性提升，zero base 和 one base 都能读；
+1. `[--force]`: 强制替换已存在的缩略图
+2. `[--log-times <n: int>]`: 对缩略图的像素值取 log 的次数
+3. `[--mat-size <n: int>]`: 缩略图的尺寸
+4. `[--block-size <n: int>]`: 直接设置子矩阵块的大小
+5. `[--tick-step <n: int>]`: 设置 x 轴和 y 轴的刻度间隔，启用后会绘制网格线，类似下图：
+   ![tick-step](./img/tick-step.svg)
+   ```shell
+   mtx-drawer draw --block-size 1 --tick-step 4 --force -ops real
+   ```
+6. `<filepath>`: mtx 文件的路径 (`draw-one`子命令中必填)
+7. `<-ops <aver | abs | real | log | ... >`: 缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换
 
-![](./img/2.png)
-
-PS：能跑满一般机械硬盘的带宽，但相比我这个移动硬盘的带宽（峰值2.9GB/s）还是慢了很多。
-
-此版本已预先发布，由于其执行期间暂时无法使用`ctrl + c`强制终止，因此还未在pypi上发布，不care这个问题的话可以先通过如下方式安装：
-
-```sh
-pip3 install cython # 首先要有cython环境
-pip3 install git+https://github.com/Rhythmicc/DrawMtxAsThumbnail.git -U
-```
-
-## 运行
-
-```shell
-mtx-drawer draw-one [--force] [--log-times <n: int>] [--mat-size <n: int>] [--block-size <n: int>] <filepath> <-ops <aver | abs | real | log>... >
-mtx-drawer draw [--force] [--log-times <n: int>] [--mat-size <n: int>] [--block-size <n: int>] <-ops <aver | abs | real | log>... >
-```
-
-### 解释
-
-1. 第一条命令是为文件`<filepath>`画缩略图 (`filepath`无需是 mtx 文件，但需要能被`scipy.io.mmread`读取)，其中`<ops>`是<font color="red">必填的多选参数</font>只能在命令末尾赋值，用于指定缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换; `force`表示强制重新画缩略图默认为否，`log-times`表示画缩略图对像素值取 log 的次数默认为 2，`mat-size`表示缩略图的尺寸（默认是 200 \* 200 的图像），`block-size`直接设置块大小（开启次选项后将覆盖掉`mat-size`参数）。
-2. 第二条命令会递归搜索当前路径下的所有 mtx 文件并绘制缩略图，参数含义与上一条描述一致。
-
-注意: ops 作为必填多选参数，必须在命令的末尾为其赋值，否则会报错。
-
-### 例子
+## 运行例子
 
 ```shell
 mtx-drawer draw-one 2.mtx --force --log-times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
@@ -123,4 +106,3 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 ### 现代 IDE 下的提示
 
 ![IDE](./img/1.png)
-
