@@ -32,7 +32,7 @@ pip3 install MtxDrawer -U
    mtx-drawer draw --block-size 1 --tick-step 4 --force -ops real
    ```
 6. `<filepath>`: mtx 文件的路径 (`draw-one`子命令中必填)
-7. `<-ops <aver | abs | real | log | ... >`: 缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换
+7. `<-ops <aver | abs | real | log | ... >>`: 缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换
 
 ## 运行例子
 
