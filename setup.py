@@ -11,8 +11,7 @@ module = Extension(
     sources=["MatGen/MatGen.pyx", "MatGen/_MatGen.c"],
     extra_compile_args=["-ffast-math", "-mfma"],
     include_dirs=[numpy.get_include()],
-    language="c",
-    language_level=3,
+    language="c"
 )
 
 setup(
