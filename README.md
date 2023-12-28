@@ -28,9 +28,11 @@ pip3 install MtxDrawer -U
 4. `[--block-size <n: int>]`: 直接设置子矩阵块的大小
 5. `[--tick-step <n: int>]`: 设置 x 轴和 y 轴的刻度间隔，启用后会绘制网格线，类似下图：
    ![tick-step](./img/tick-step.svg)
+
    ```shell
    mtx-drawer draw --block-size 1 --tick-step 4 --force -ops real
    ```
+
 6. `<filepath>`: mtx 文件的路径 (`draw-one`子命令中必填)
 7. `<-ops <aver | abs | real | log | ... >>`: 缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换
 

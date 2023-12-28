@@ -570,6 +570,9 @@ static int mm_read_unsymmetric_sparse(const char *fname, int *M_, int *N_, int *
     return 0;
 }
 
+#define max(a,b) ((a)>(b)?(a):(b))
+#define min(a,b) ((a)<(b)?(a):(b))
+
 typedef struct
 {
     int rows;
@@ -677,7 +680,7 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
     }
     else
     {
-        int mat_size = mat_sz;
+        int mat_size = min(mat_sz, max(m, n));
         if (m >= n)
         {
             double rate = (double)n / m;
@@ -720,10 +723,10 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
                 val = 1;
             }
             else if (isReal || isInteger)
-                sscanf(line, "%d%d%lf", &ia, &ja, &val);
+                sscanf(line, "%d%d%lg", &ia, &ja, &val);
             else if (isComplex)
-                sscanf(line, "%d%d%lf%lf", &ia, &ja, &val, &val_im);
-
+                sscanf(line, "%d%d%lg%lg", &ia, &ja, &val, &val_im);
+            
             if (is_one_based && (ia == 0 || ja == 0))
                 is_one_based = 0;
             if (is_one_based)

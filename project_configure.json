@@ -1,5 +1,5 @@
 {
-    "build": "",
+    "build": "python3 setup.py build_ext --inplace",
     "entry_point": "",
     "executable": "python3 -m MtxDrawer.main",
     "input_file": "",
@@ -8,7 +8,7 @@
         {
             "user": "lianhaocheng",
             "host": "localhost",
-            "path": "/opt/homebrew/lib/python3.10/site-packages/",
+            "path": "/opt/homebrew/lib/python3.11/site-packages/",
             "port": "22"
         }, {
             "user": "rhythmlian",
