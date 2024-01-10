@@ -241,8 +241,8 @@ class Drawer:
         """
         self.row_size = info["trows"]
         self.col_size = info["tcols"]
-        self.row_block_sz = info['rows'] / self.row_size
-        self.col_block_sz = info['cols'] / self.col_size
+        self.row_block_sz = info['rows'] / self.row_size if self.block_sz == -1 else self.block_sz
+        self.col_block_sz = info['cols'] / self.col_size if self.block_sz == -1 else self.block_sz
         self.coo_shape = (info["rows"], info["cols"])
         self.raw_mat = info["raw_mat"]
         if self.has_aver:
@@ -253,22 +253,16 @@ class Drawer:
         self.x_ticks = (
             np.linspace(0, self.col_size, 4, True, dtype=np.int32)
             if self.tick_step == -1
-            else np.linspace(
-                0,
-                self.col_size,
-                self.col_size // self.tick_step + 1,
-                True,
+            else np.array(
+                [i for i in range(0, self.col_size, self.tick_step)] + [self.col_size],
                 dtype=np.int32,
             )
         )
         self.y_ticks = (
             np.linspace(0, self.row_size, 4, True, dtype=np.int32)
             if self.tick_step == -1
-            else np.linspace(
-                0,
-                self.row_size,
-                self.row_size // self.tick_step + 1,
-                True,
+            else np.array(
+                [i for i in range(0, self.row_size, self.tick_step)] + [self.row_size],
                 dtype=np.int32,
             )
         )
@@ -307,8 +301,11 @@ class Drawer:
             norm=cm.colors.Normalize(vmin=-self.absVal, vmax=self.absVal),
             extent=[0, self.col_size, self.row_size, 0],
         ) 
-        plt.xticks(ticks=self.x_ticks, labels=np.array(self.x_ticks * self.col_block_sz, dtype=np.int32))
-        plt.yticks(ticks=self.y_ticks, labels=np.array(self.y_ticks * self.row_block_sz, dtype=np.int32))
+        ax = plt.gca()
+        ax.xaxis.tick_top()
+        ax.xaxis.set_label_position("top")
+        plt.xticks(ticks=self.x_ticks, labels=np.append(self.x_ticks[:-1] * self.col_block_sz, self.coo_shape[1]).astype(np.int32))
+        plt.yticks(ticks=self.y_ticks, labels=np.append(self.y_ticks[:-1] * self.row_block_sz, self.coo_shape[0]).astype(np.int32))
         if self.tick_step != -1:
             plt.grid(color="black", linestyle="-", linewidth=1)
         plt.tick_params(axis="x", colors=self.font_color)
