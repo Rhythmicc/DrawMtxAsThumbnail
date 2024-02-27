@@ -11,6 +11,10 @@
             "/opt/homebrew/lib/python3.11/site-packages/numpy/core/include/numpy/ufuncobject.h",
             "MatGen/_MatGen.c"
         ],
+        "extra_compile_args": [
+            "-ffast-math",
+            "-mfma"
+        ],
         "include_dirs": [
             "MatGen",
             "/opt/homebrew/lib/python3.11/site-packages/numpy/core/include"
@@ -4638,7 +4642,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
  *     free(mat.raw_mat)             # <<<<<<<<<<<<<<
  *     if using_div:
- *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()
+ *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()
  */
   free(__pyx_v_mat.raw_mat);
 
@@ -4646,7 +4650,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
  *     free(mat.raw_mat)
  *     if using_div:             # <<<<<<<<<<<<<<
- *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()
+ *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()
  *         free(mat.div_mat)
  */
   __pyx_t_3 = (__pyx_v_using_div != 0);
@@ -4655,11 +4659,11 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
     /* "MatGen/MatGen.pyx":39
  *     free(mat.raw_mat)
  *     if using_div:
- *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()             # <<<<<<<<<<<<<<
+ *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()             # <<<<<<<<<<<<<<
  *         free(mat.div_mat)
  *     else:
  */
-    __pyx_t_5 = PyArray_SimpleNewFromData(2, __pyx_v_dims, NPY_INT, ((void *)__pyx_v_mat.div_mat)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+    __pyx_t_5 = PyArray_SimpleNewFromData(2, __pyx_v_dims, NPY_INT64, ((void *)__pyx_v_mat.div_mat)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_copy); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
@@ -4711,7 +4715,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
 
     /* "MatGen/MatGen.pyx":40
  *     if using_div:
- *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()
+ *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()
  *         free(mat.div_mat)             # <<<<<<<<<<<<<<
  *     else:
  *         div_mat = None
@@ -4722,7 +4726,7 @@ static PyObject *__pyx_pf_9MtxDrawer_9MtxReader_mat_gen(CYTHON_UNUSED PyObject *
  *     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
  *     free(mat.raw_mat)
  *     if using_div:             # <<<<<<<<<<<<<<
- *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()
+ *         div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()
  *         free(mat.div_mat)
  */
     goto __pyx_L4;

@@ -36,7 +36,7 @@ def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):
     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
     free(mat.raw_mat)
     if using_div:
-        div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT, <void*>mat.div_mat).copy()
+        div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()
         free(mat.div_mat)
     else:
         div_mat = None
