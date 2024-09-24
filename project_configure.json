@@ -12,7 +12,7 @@
             "port": "22"
         }, {
             "user": "rhythmlian",
-            "host": "amd128n",
+            "host": "amd02",
             "path": "/home/rhythmlian/.local/lib/python3.8/site-packages/",
             "port": "22"
         }

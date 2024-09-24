@@ -582,7 +582,7 @@ typedef struct
     double *raw_mat;
     double real_max_value;
     double real_min_value;
-    int *div_mat;
+    double *div_mat;
 } ThumbnailMatrix;
 
 static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_sz, int using_div)
@@ -705,12 +705,10 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
 
     double *raw_mat = (double *)calloc(res.trows * res.tcols, sizeof(double));
 
-    int *div_mat = NULL;
+    double *div_mat = NULL;
     if (using_div)
     {
-        div_mat = (int *)malloc(sizeof(int) * res.trows * res.tcols);
-        for (int i = 0; i < res.trows * res.tcols; ++i)
-            div_mat[i] = 1;
+        div_mat = (double *)calloc(res.trows * res.tcols, sizeof(double));
     }
 
     char line[MM_MAX_LINE_LENGTH];
@@ -758,6 +756,12 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
                 }
             }
         }
+    }
+
+    for (int i = 0; i < res.trows * res.tcols; ++i)
+    {
+        if (div_mat[i] == 0)
+            div_mat[i] = 1;
     }
 
     fclose(fp);

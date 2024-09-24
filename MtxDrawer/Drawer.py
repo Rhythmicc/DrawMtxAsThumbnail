@@ -3,6 +3,7 @@ import math
 from pylab import cm
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors
 from . import *
 import inspect
 from inspect import isfunction
@@ -28,6 +29,10 @@ class Drawer:
         "col_block_sz",
         "real_max_data",
         "real_min_data",
+    }
+    color_theme = {
+        "Default": colors.LinearSegmentedColormap.from_list("Default", ["blue", "white", "red"]),
+        "SuiteSparse": colors.LinearSegmentedColormap.from_list("SuiteSparse", ["yellow", "white", "blue"])
     }
 
     @classmethod
@@ -100,6 +105,7 @@ class Drawer:
         set_mat_size: int = 200,
         set_block_size: int = -1,
         set_tick_step: int = -1,
+        set_color_theme: str = "Default",
         img_format: str = "svg",
         font_color: str = "black",
         show_in_console: bool = False,
@@ -124,6 +130,7 @@ class Drawer:
         self.img_path = filepath.split(".")
         self.img_path = ".".join(self.img_path[:-1]) + "_{}" + f".{img_format}"
         self.log_times = set_log_times
+        self.color_map = Drawer.color_theme[set_color_theme]
         self.show_in_console = show_in_console
         if self.show_in_console:
             console.print(info_string, "已开启控制台显示图像")
@@ -297,10 +304,10 @@ class Drawer:
         plt.imshow(
             self.mat,
             origin="upper",
-            cmap="bwr",
+            cmap=self.color_map,
             norm=cm.colors.Normalize(vmin=-self.absVal, vmax=self.absVal),
             extent=[0, self.col_size, self.row_size, 0],
-        ) 
+        )
         ax = plt.gca()
         ax.xaxis.tick_top()
         ax.xaxis.set_label_position("top")
@@ -310,8 +317,8 @@ class Drawer:
             plt.grid(color="black", linestyle="-", linewidth=1)
         plt.tick_params(axis="x", colors=self.font_color)
         plt.tick_params(axis="y", colors=self.font_color)
-        bar = plt.colorbar()
-        bar.ax.tick_params(labelcolor=self.font_color)
+        # bar = plt.colorbar()
+        # bar.ax.tick_params(labelcolor=self.font_color)
         # 设置背景透明
         fig.patch.set_alpha(0)
         if not self.show_in_console:

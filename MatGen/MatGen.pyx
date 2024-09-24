@@ -18,7 +18,7 @@ cdef extern from "_MatGen.c":
         double* raw_mat # data of the matrix (trows, tcols)
         double real_max_value
         double real_min_value
-        int* div_mat    # division matrix (trows, tcols)
+        double* div_mat    # division matrix (trows, tcols)
     ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
 
 def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):
@@ -27,7 +27,7 @@ def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):
     """
     cdef ThumbnailMatrix mat = mat_gen_impl(file_path.encode('utf-8'), block_sz, mat_sz, using_div)
     cdef cnp.ndarray[cnp.double_t, ndim=2] raw_mat
-    cdef cnp.ndarray[cnp.int_t, ndim=2] div_mat
+    cdef cnp.ndarray[cnp.double_t, ndim=2] div_mat
     if mat.raw_mat == NULL:
         raise ValueError("Cannot read matrix from file: {}".format(file_path))
     cdef npy_intp dims[2]
@@ -36,7 +36,7 @@ def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):
     raw_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.raw_mat).copy()
     free(mat.raw_mat)
     if using_div:
-        div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_INT64, <void*>mat.div_mat).copy()
+        div_mat = cnp.PyArray_SimpleNewFromData(2, dims, cnp.NPY_DOUBLE, <void*>mat.div_mat).copy()
         free(mat.div_mat)
     else:
         div_mat = None

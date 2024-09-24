@@ -42,6 +42,7 @@ def draw_one(
     tick_step: int = -1,
     img_format: str = "svg",
     font_color: str = "black",
+    color_theme: str = "Default",
     show_in_console: bool = False,
 ):
     """
@@ -70,6 +71,7 @@ def draw_one(
             set_tick_step=tick_step,
             img_format=img_format,
             font_color=font_color,
+            set_color_theme=color_theme,
             show_in_console=show_in_console,
         )
     except ValueError:
@@ -89,6 +91,7 @@ def draw(
     tick_step: int = -1,
     img_format: str = "svg",
     font_color: str = "black",
+    color_theme: str = "Default"
 ):
     """
     多个文件处理
@@ -117,6 +120,7 @@ def draw(
                         set_tick_step=tick_step,
                         img_format=img_format,
                         font_color=font_color,
+                        set_color_theme=color_theme
                     )
                     for func in ops:
                         drawer.call(func)
