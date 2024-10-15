@@ -758,10 +758,12 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
         }
     }
 
-    for (int i = 0; i < res.trows * res.tcols; ++i)
-    {
-        if (div_mat[i] == 0)
-            div_mat[i] = 1;
+    if (using_div) {
+        for (int i = 0; i < res.trows * res.tcols; ++i)
+        {
+            if (div_mat[i] == 0)
+                div_mat[i] = 1;
+        }
     }
 
     fclose(fp);

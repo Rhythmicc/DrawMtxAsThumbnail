@@ -108,6 +108,7 @@ class Drawer:
         set_color_theme: str = "Default",
         img_format: str = "svg",
         font_color: str = "black",
+        color_bar: bool = True,
         show_in_console: bool = False,
     ):
         """
@@ -131,6 +132,7 @@ class Drawer:
         self.img_path = ".".join(self.img_path[:-1]) + "_{}" + f".{img_format}"
         self.log_times = set_log_times
         self.color_map = Drawer.color_theme[set_color_theme]
+        self.color_bar = color_bar
         self.show_in_console = show_in_console
         if self.show_in_console:
             console.print(info_string, "已开启控制台显示图像")
@@ -317,6 +319,11 @@ class Drawer:
             plt.grid(color="black", linestyle="-", linewidth=1)
         plt.tick_params(axis="x", colors=self.font_color)
         plt.tick_params(axis="y", colors=self.font_color)
+        if self.color_bar:
+            bar = plt.colorbar()
+            bar.ax.tick_params(labelcolor=self.font_color)
+        else:
+            plt.axis("off")
         # bar = plt.colorbar()
         # bar.ax.tick_params(labelcolor=self.font_color)
         # 设置背景透明
