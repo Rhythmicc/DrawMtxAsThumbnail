@@ -320,12 +320,9 @@ class Drawer:
         plt.tick_params(axis="x", colors=self.font_color)
         plt.tick_params(axis="y", colors=self.font_color)
         if self.color_bar:
-            bar = plt.colorbar()
-            bar.ax.tick_params(labelcolor=self.font_color)
+            plt.colorbar().ax.tick_params(labelcolor=self.font_color)
         else:
-            plt.axis("off")
-        # bar = plt.colorbar()
-        # bar.ax.tick_params(labelcolor=self.font_color)
+            plt.colorbar().remove()
         # 设置背景透明
         fig.patch.set_alpha(0)
         if not self.show_in_console:
