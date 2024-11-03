@@ -32,7 +32,7 @@ class Drawer:
     }
     color_theme = {
         "Default": colors.LinearSegmentedColormap.from_list("Default", ["blue", "white", "red"]),
-        "SuiteSparse": colors.LinearSegmentedColormap.from_list("SuiteSparse", ["yellow", "white", "blue"])
+        "SuiteSparse": colors.LinearSegmentedColormap.from_list("SuiteSparse", ["black", "blue", "cyan", "white", "green", "orange", "yellow"])
     }
 
     @classmethod

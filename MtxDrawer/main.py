@@ -19,6 +19,10 @@ def draw_one():
 def draw_one():
     return ['abs', 'log', 'aver', 'real']
 
+@app.custom_complete("color_theme")
+def draw_one():
+    return ["Default", "SuiteSparse"]
+
 @app.custom_complete('font_color')
 def draw():
     return ["black", "white", "red", "green", "blue", "yellow", "cyan", "magenta"]
@@ -30,6 +34,10 @@ def draw():
 @app.custom_complete('ops')
 def draw():
     return ['abs', 'log', 'aver', 'real']
+
+@app.custom_complete('color_theme')
+def draw():
+    return ["Default", "SuiteSparse"]
 
 @app.command()
 def draw_one(
