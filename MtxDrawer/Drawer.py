@@ -110,6 +110,7 @@ class Drawer:
         font_color: str = "black",
         color_bar: bool = True,
         show_in_console: bool = False,
+        parallel: bool = False,
     ):
         """
         初始化Drawer对象
@@ -136,7 +137,7 @@ class Drawer:
         self.show_in_console = show_in_console
         if self.show_in_console:
             console.print(info_string, "已开启控制台显示图像")
-        else:
+        elif not parallel:
             console.print(info_string, f'路径模板: "{self.img_path}"')
 
         self.mat_size = set_mat_size
@@ -175,9 +176,11 @@ class Drawer:
             None,
         )
         self.absVal = 1
+        self.parallel = parallel
 
     def loadMtx(self):
-        status.update("加载矩阵")
+        if not self.parallel:
+            status.update("加载矩阵")
         try:
             self.mtx = requirePackage("scipy.sparse", "coo_matrix")(
                 requirePackage("scipy.io", "mmread")(self.filepath)
@@ -219,8 +222,8 @@ class Drawer:
         self.coo_rows = np.floor(self.mtx.row / self.row_block_sz).astype(np.int32)
         self.coo_cols = np.floor(self.mtx.col / self.col_block_sz).astype(np.int32)
         self.raw_mat = np.zeros((self.row_size, self.col_size), dtype=float)
-
-        status.update("生成画布")
+        if not self.parallel:
+            status.update("生成画布")
         if self.has_aver:
             self.div = np.ones((self.row_size, self.col_size), dtype=float)
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
@@ -232,7 +235,8 @@ class Drawer:
                 self.raw_mat[i[1:]] += i[0]
 
     def loadMtx_streaming(self):
-        status.update("加载矩阵并更新画布")
+        if not self.parallel:
+            status.update("加载矩阵并更新画布")
 
         from .MtxReader import mat_gen
 
@@ -277,7 +281,10 @@ class Drawer:
         )
 
     def call(self, func_name: str, **kw_extern_args):
-        status(f"正在执行: {func_name}").start()
+        from multiprocessing import Process
+
+        if not self.parallel:
+            status(f"正在执行: {func_name}").start()
         func_name = func_name.strip("_")
         if func_name not in Drawer.algorithm_func_table:
             raise KeyError(f"Algorithm '{func_name}' not registered!")
@@ -286,7 +293,7 @@ class Drawer:
         args_body = {}
         if self.raw_mat is None:
             self.loadMtx_streaming()
-        status(f"正在执行: {func_name}")
+        # status(f"正在执行: {func_name}")
         self.mat = self.raw_mat.copy()
         for arg in analyser.parameters.values():
             if arg.name in Drawer.valid_parameters:
@@ -295,12 +302,18 @@ class Drawer:
         if os.path.exists(self.img_path.format(func_name)) and not self.force_update:
             return
         self.absVal = algorithm(**args_body)
-        self.draw(func_name)
+        if not self.parallel:
+            self.draw(func_name)
+        else:
+            process = Process(target=self.draw, args=(func_name,))
+            process.start()
+            process.join()  # 等待绘图完成
 
     def draw(self, suffix: str):
         if self.mat is None:
             return
-        console.print(info_string, "absVal =", self.absVal)
+        if not self.parallel:
+            console.print(info_string, "absVal =", self.absVal)
 
         fig = plt.figure()
         plt.imshow(

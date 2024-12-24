@@ -102,7 +102,8 @@ def draw(
     img_format: str = "svg",
     font_color: str = "black",
     color_bar: bool = False,
-    color_theme: str = "Default"
+    color_theme: str = "Default",
+    parallel: bool = False,
 ):
     """
     多个文件处理
@@ -114,35 +115,79 @@ def draw(
     :param block_size: 设置块大小（此参数设置后将覆盖mat_size）
     :return:
     """
-    has_aver = "aver" in ops
-    status("遍历并处理").start()
-    for rt, _, sonFiles in os.walk(rt_path, followlinks=True):
-        for file in sonFiles:
-            if file.endswith(".mtx"):
-                try:
-                    console.rule(f'{os.path.join(rt, file)}')
-                    drawer = Drawer(
-                        os.path.join(rt, file),
-                        has_aver,
-                        force,
-                        log_times,
-                        set_mat_size=mat_size,
-                        set_block_size=block_size,
-                        set_tick_step=tick_step,
-                        img_format=img_format,
-                        font_color=font_color,
-                        color_bar=color_bar,
-                        set_color_theme=color_theme
-                    )
-                    for func in ops:
-                        drawer.call(func)
-                except ValueError:
-                    continue
-                except Exception:
-                    console.print_exception()
-    status.stop()
-    console.print(info_string, "处理完成")
-    console.print("-" * console.width)
+    if not parallel:
+        has_aver = "aver" in ops
+        status("遍历并处理").start()
+        for rt, _, sonFiles in os.walk(rt_path, followlinks=True):
+            for file in sonFiles:
+                if file.endswith(".mtx"):
+                    try:
+                        console.rule(f'{os.path.join(rt, file)}')
+                        drawer = Drawer(
+                            os.path.join(rt, file),
+                            has_aver,
+                            force,
+                            log_times,
+                            set_mat_size=mat_size,
+                            set_block_size=block_size,
+                            set_tick_step=tick_step,
+                            img_format=img_format,
+                            font_color=font_color,
+                            color_bar=color_bar,
+                            set_color_theme=color_theme
+                        )
+                        for func in ops:
+                            drawer.call(func)
+                    except ValueError:
+                        continue
+                    except Exception:
+                        console.print_exception()
+        status.stop()
+        console.print(info_string, "处理完成")
+        console.print("-" * console.width)
+    else:
+        mtx_files = []
+        for rt, _, sonFiles in os.walk(rt_path, followlinks=True):
+            for file in sonFiles:
+                if file.endswith(".mtx"):
+                    mtx_files.append(os.path.join(rt, file))
+
+        from concurrent.futures import ThreadPoolExecutor, wait
+        
+        def draw_one_file(file, progress=None, task_id=None):
+            try:
+                drawer = Drawer(
+                    file,
+                    "aver" in ops,
+                    force,
+                    log_times,
+                    set_mat_size=mat_size,
+                    set_block_size=block_size,
+                    set_tick_step=tick_step,
+                    img_format=img_format,
+                    font_color=font_color,
+                    set_color_theme=color_theme,
+                    color_bar=color_bar,
+                    show_in_console=False,
+                )
+                for func in ops:
+                    drawer.call(func)
+                if progress:
+                    progress.advance(task_id)
+            except ValueError:
+                return
+            except Exception:
+                return
+
+        from rich.progress import Progress
+        progress = Progress()
+        task_id = progress.add_task("Drawing", total=len(mtx_files))
+
+        progress.start()
+        with ThreadPoolExecutor() as executor:
+            futures = [executor.submit(draw_one_file, file, progress, task_id) for file in mtx_files]
+            wait(futures)
+        progress.stop()
 
 
 @app.command()
