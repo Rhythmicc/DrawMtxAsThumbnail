@@ -14,7 +14,15 @@
 pip3 install MtxDrawer -U
 ```
 
-自动安装依赖并注册一个命令`mtx-drawer`
+安装预览版，支持并行画图:
+
+```shell
+pip3 install git+https://github.com/Rhythmicc/DrawMtxAsThumbnail.git
+# 可以添加parallel标志来启用并行画图
+# mtx-drawer draw --parallel 
+```
+
+安装后可以使用命令`mtx-drawer`
 
 ## 子命令与参数
 
