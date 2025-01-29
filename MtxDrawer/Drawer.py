@@ -338,10 +338,14 @@ class Drawer:
             plt.colorbar().remove()
         # 设置背景透明
         fig.patch.set_alpha(0)
+        fig.tight_layout()
+        plt.subplots_adjust(left=0.00, wspace=0.0)
+
         if not self.show_in_console:
             fig.savefig(
                 self.img_path.format(suffix),
                 format=self.img_format,
+                bbox_inches='tight',  # 确保边界紧凑
                 dpi=300,
             )
         else:
