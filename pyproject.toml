@@ -2,7 +2,7 @@
 [[tool.qpro.server_targets]]
 user = "lianhaocheng"
 host = "localhost"
-path = "/opt/homebrew/lib/python3.11/site-packages/"
+path = "/opt/homebrew/lib/python3.13/site-packages/"
 port = "22"
 
 [[tool.qpro.server_targets]]
