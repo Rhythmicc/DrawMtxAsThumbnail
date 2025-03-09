@@ -105,7 +105,7 @@ static char *mm_strdup(const char *s);
 static char *mm_typecode_to_str(MM_typecode matcode);
 static int mm_read_mtx_crd(char *fname, int *M, int *N, int *nz, int **II, int **JJ, double **val, MM_typecode *matcode);
 static int mm_read_banner(FILE *f, MM_typecode *matcode);
-static int mm_read_mtx_crd_size(FILE *f, int *M, int *N, int *nz);
+static int mm_read_mtx_crd_size(FILE *f, unsigned long long *M, unsigned long long *N, unsigned long long *nz);
 static int mm_read_mtx_array_size(FILE *f, int *M, int *N);
 static int mm_write_banner(FILE *f, MM_typecode matcode);
 static int mm_write_mtx_crd_size(FILE *f, int M, int N, int nz);
@@ -303,7 +303,7 @@ static int mm_read_banner(FILE *f, MM_typecode *matcode)
     return 0;
 }
 
-static int mm_read_mtx_crd_size(FILE *f, int *M, int *N, int *nz)
+static int mm_read_mtx_crd_size(FILE *f, unsigned long long *M, unsigned long long *N, unsigned long long *nz)
 {
     char line[MM_MAX_LINE_LENGTH];
     int num_items_read;
@@ -319,13 +319,13 @@ static int mm_read_mtx_crd_size(FILE *f, int *M, int *N, int *nz)
     } while (line[0] == '%');
 
     /* line[] is either blank or has M,N, nz */
-    if (sscanf(line, "%d %d %d", M, N, nz) == 3)
+    if (sscanf(line, "%lli %lli %lli", M, N, nz) == 3)
         return 0;
 
     else
         do
         {
-            num_items_read = fscanf(f, "%d %d %d", M, N, nz);
+            num_items_read = fscanf(f, "%lli %lli %lli", M, N, nz);
             if (num_items_read == EOF)
                 return MM_PREMATURE_EOF;
         } while (num_items_read != 3);
@@ -575,17 +575,17 @@ static int mm_read_unsymmetric_sparse(const char *fname, int *M_, int *N_, int *
 
 typedef struct
 {
-    int rows;
-    int cols;
-    int trows;
-    int tcols;
+    unsigned long long rows;
+    unsigned long long cols;
+    unsigned long long trows;
+    unsigned long long tcols;
     double *raw_mat;
     double real_max_value;
     double real_min_value;
     double *div_mat;
 } ThumbnailMatrix;
 
-static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_sz, int using_div)
+static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, unsigned long long mat_sz, int using_div)
 {
     ThumbnailMatrix res;
     memset(&res, 0, sizeof(ThumbnailMatrix));
@@ -594,7 +594,8 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
     res.real_max_value = 0;
     res.real_min_value = 0;
 
-    int isInteger = 0, isReal = 0, isPattern = 0, isSymmetric_tmp = 0, isComplex = 0, m, n, nnz;
+    int isInteger = 0, isReal = 0, isPattern = 0, isSymmetric_tmp = 0, isComplex = 0;
+    unsigned long long m, n, nnz;
     MM_typecode matcode;
 
     int fd = open(filepath, O_RDONLY);
@@ -668,7 +669,7 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
         return res;
     }
 
-    double row_block_sz, col_block_sz;
+    unsigned long long row_block_sz, col_block_sz;
     res.rows = m;
     res.cols = n;
 
@@ -680,10 +681,10 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
     }
     else
     {
-        int mat_size = min(mat_sz, max(m, n));
+        unsigned long long mat_size = min(mat_sz, max(m, n));
         if (m >= n)
         {
-            double rate = (double)n / m;
+            double rate = (double)n / (double)m;
             res.trows = mat_size;
             res.tcols = ceil(mat_size * rate);
             row_block_sz = m * 1.0 / res.trows;
@@ -691,7 +692,7 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
         }
         else
         {
-            double rate = (double)m / n;
+            double rate = (double)m / (double)n;
             res.tcols = mat_size;
             res.trows = ceil(mat_size * rate);
             row_block_sz = m * 1.0 / res.trows;
@@ -699,7 +700,7 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
         }
     }
 
-    int ia, ja;
+    unsigned long long ia, ja;
     double val, val_im;
     int is_one_based = 1;
 
@@ -712,18 +713,18 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
     }
 
     char line[MM_MAX_LINE_LENGTH];
-    for (int index = 0; index < nnz; ++index)
+    for (unsigned long long index = 0; index < nnz; ++index)
     {
         if (fgets(line, sizeof(line), fp) != NULL)
         {   
             if (isPattern) {
-                sscanf(line, "%d%d", &ia, &ja);
+                sscanf(line, "%lli%lli", &ia, &ja);
                 val = 1;
             }
             else if (isReal || isInteger)
-                sscanf(line, "%d%d%lg", &ia, &ja, &val);
+                sscanf(line, "%lli%lli%lg", &ia, &ja, &val);
             else if (isComplex)
-                sscanf(line, "%d%d%lg%lg", &ia, &ja, &val, &val_im);
+                sscanf(line, "%lli%lli%lg%lg", &ia, &ja, &val, &val_im);
             
             if (is_one_based && (ia == 0 || ja == 0))
                 is_one_based = 0;
@@ -733,8 +734,9 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, int mat_
                 --ja;
             }
 
-            int row = ia / row_block_sz;
-            int col = ja / col_block_sz;
+            unsigned long long row = ia / row_block_sz;
+            unsigned long long col = ja / col_block_sz;
+            // printf("row: %lli, col: %lli, val: %f\n", row, col, val);
 
             raw_mat[row * res.tcols + col] += val;
             if (index) {

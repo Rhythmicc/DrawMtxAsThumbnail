@@ -11,15 +11,15 @@ cdef int _numpy_initialized = cnp.import_array()
 
 cdef extern from "_MatGen.c":
     ctypedef struct ThumbnailMatrix:
-        int rows
-        int cols  # original size (rows, cols)
-        int trows
-        int tcols # thumbnail size (trows, tcols)
+        unsigned long long rows
+        unsigned long long cols  # original size (rows, cols)
+        unsigned long long trows
+        unsigned long long tcols # thumbnail size (trows, tcols)
         double* raw_mat # data of the matrix (trows, tcols)
         double real_max_value
         double real_min_value
         double* div_mat    # division matrix (trows, tcols)
-    ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, int mat_sz, int using_div)
+    ThumbnailMatrix mat_gen_impl(const char* file_path, int block_sz, unsigned long long mat_sz, int using_div)
 
 def mat_gen(str file_path, int block_sz, int mat_sz, int using_div):
     """
