@@ -9,12 +9,6 @@ host = "localhost"
 path = "/opt/homebrew/lib/python3.13/site-packages/"
 port = "22"
 
-[[tool.qpro.server_targets]]
-user = "rhythmlian"
-host = "amd02"
-path = "/home/rhythmlian/.local/lib/python3.8/site-packages/"
-port = "22"
-
 [tool.qpro.config]
 build = "python3 setup.py build_ext --inplace"
 entry_point = ""

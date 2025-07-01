@@ -669,7 +669,7 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, unsigned
         return res;
     }
 
-    unsigned long long row_block_sz, col_block_sz;
+    double row_block_sz, col_block_sz;
     res.rows = m;
     res.cols = n;
 
@@ -705,11 +705,27 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, unsigned
     int is_one_based = 1;
 
     double *raw_mat = (double *)calloc(res.trows * res.tcols, sizeof(double));
+    if (raw_mat == NULL)
+    {
+        printf("\nFailed to allocate memory for canvas: Matrix size = %llu x %llu, Non-zeros = %llu, Canvas size = %llu x %llu\n", m, n, nnz, res.trows, res.tcols);
+        fclose(fp);
+        munmap(file_data, sb.st_size);
+        close(fd);
+        return res;
+    }
 
     double *div_mat = NULL;
     if (using_div)
     {
         div_mat = (double *)calloc(res.trows * res.tcols, sizeof(double));
+        if (div_mat == NULL)
+        {
+            perror("Failed to allocate memory for counters");
+            fclose(fp);
+            munmap(file_data, sb.st_size);
+            close(fd);
+            return res;
+        }
     }
 
     char line[MM_MAX_LINE_LENGTH];
@@ -734,9 +750,8 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, unsigned
                 --ja;
             }
 
-            unsigned long long row = ia / row_block_sz;
-            unsigned long long col = ja / col_block_sz;
-            // printf("row: %lli, col: %lli, val: %f\n", row, col, val);
+            unsigned long long row = min(floor(ia / row_block_sz), res.trows - 1);
+            unsigned long long col = min(floor(ja / col_block_sz), res.tcols - 1);
 
             raw_mat[row * res.tcols + col] += val;
             if (index) {
