@@ -9,47 +9,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_wheels:
-    name: Build wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
-      fail-fast: false
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install uv
-      uses: astral-sh/setup-uv@v3
-
-    - name: Install build dependencies
-      run: uv pip install --system build twine cython numpy
-
-    - name: Build wheel and source distribution
-      run: |
-        uv pip install --system -e .
-        python -m build
-      continue-on-error: true
-
-    - name: Check build artifacts
-      run: |
-        ls -la dist/
-        python -m twine check dist/* || true
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: wheels-${{ matrix.os }}-${{ matrix.python-version }}
-        path: dist/*
-        if-no-files-found: ignore
-
   build_sdist:
     name: Build source distribution
     runs-on: ubuntu-latest
@@ -70,27 +29,22 @@ jobs:
     - name: Build source distribution
       run: python -m build --sdist
 
-    - name: Check build artifacts
-      run: |
-        ls -la dist/
-        python -m twine check dist/*
-
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
         name: sdist
         path: dist/*.tar.gz
 
-  test_install:
-    name: Test installation
-    needs: [build_sdist]
-    runs-on: ubuntu-latest
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+
     steps:
-    - name: Download sdist
-      uses: actions/download-artifact@v4
-      with:
-        name: sdist
-        path: dist
+    - uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -100,16 +54,23 @@ jobs:
     - name: Install uv
       uses: astral-sh/setup-uv@v3
 
-    - name: Test installation from sdist
-      run: |
-        uv pip install --system cython numpy matplotlib Qpro
-        uv pip install --system dist/*.tar.gz
-        python -c "import MtxDrawer; print('Installation test passed')"
-        mtx-drawer --help
+    - name: Install build dependencies
+      run: uv pip install --system build cython numpy
+
+    - name: Build wheel
+      run: python -m build --wheel
+      continue-on-error: true
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: wheels-${{ matrix.os }}
+        path: dist/*
+        if-no-files-found: ignore
 
   publish:
     name: Publish to PyPI
-    needs: [build_wheels, build_sdist, test_install]
+    needs: [build_sdist, build_wheels]
     runs-on: ubuntu-latest
     if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
     environment:

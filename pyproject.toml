@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "MtxDrawer"
-version = "0.0.38"
+version = "0.0.39"
 description = "Draw Mtx As Thumbnail"
 readme = "README.md"
 license = "MIT"

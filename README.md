@@ -146,24 +146,24 @@ uv pip install -e .
 uv pip install build cython numpy
 python -m build
 
-# 运行测试
+# 运行测试（本地测试）
 python -c "import MtxDrawer; print('Import test passed')"
 mtx-drawer --help
 
 # 清理构建产物
 rm -rf build/ dist/ *.egg-info/
 
-# 代码格式化
+# 代码格式化（推荐在提交前运行）
 black .
 isort .
 
-# 代码检查
+# 代码检查（推荐在提交前运行）
 flake8 .
 ```
 
 ### 发布流程
 
-项目使用 GitHub Actions 进行自动化发布：
+项目使用 GitHub Actions 进行自动化构建和发布：
 
 1. **手动发布**：在 GitHub Actions 页面手动触发 "Release" 工作流，输入版本号
 2. **自动发布**：推送以 `v` 开头的标签（如 `v0.0.39`）会自动触发构建和发布到 PyPI
@@ -171,10 +171,10 @@ flake8 .
 
 ### GitHub Actions 工作流
 
-- **CI** (`.github/workflows/ci.yml`)：每次推送和 PR 时运行，测试多个 Python 版本和平台的构建，包含代码质量检查
-- **Publish** (`.github/workflows/publish.yml`)：标签推送或创建 Release 时自动构建和发布到 PyPI
+- **Publish** (`.github/workflows/publish.yml`)：标签推送或创建 Release 时自动构建多平台包并发布到 PyPI
 - **Release** (`.github/workflows/release.yml`)：手动触发的版本发布工作流，自动更新版本号并创建标签
-- **Code Quality** (`.github/workflows/code-quality.yml`)：定期运行代码格式化检查，自动创建 PR 修复格式问题
+
+> **注意**：代码测试和质量检查在本地进行，GitHub Actions 专注于打包和发布功能。
 
 ### 项目结构
 
