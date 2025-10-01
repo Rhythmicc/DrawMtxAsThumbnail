@@ -1,6 +1,6 @@
 # Draw Mtx As Thumbnail - 将 Mtx 画为缩略图
 
-![help](https://cos.rhythmlian.cn/ImgBed/a9cdf3bef0655d1d6e2563c40069938b.png)
+![help](https://cos.rhythm.icu/ImgBed/a9cdf3bef0655d1d6e2563c40069938b.png)
 
 ## 样例
 
@@ -116,3 +116,76 @@ drawer.call('myOwnAlgorithm', extern_arg=1)
 ### 现代 IDE 下的提示
 
 ![IDE](./img/1.png)
+
+## 开发指南
+
+### 环境要求
+
+本项目使用 [uv](https://github.com/astral-sh/uv) 进行快速包管理和虚拟环境处理。
+
+### 开发环境设置
+
+```bash
+# 创建虚拟环境
+uv venv
+
+# 激活虚拟环境
+source .venv/bin/activate
+
+# 安装开发依赖
+uv pip install -e ".[dev]"
+```
+
+### 常用开发任务
+
+```bash
+# 以开发模式安装
+uv pip install -e .
+
+# 构建包
+uv pip install build cython numpy
+python -m build
+
+# 运行测试
+python -c "import MtxDrawer; print('Import test passed')"
+mtx-drawer --help
+
+# 清理构建产物
+rm -rf build/ dist/ *.egg-info/
+
+# 代码格式化
+black .
+isort .
+
+# 代码检查
+flake8 .
+```
+
+### 发布流程
+
+项目使用 GitHub Actions 进行自动化发布：
+
+1. **手动发布**：在 GitHub Actions 页面手动触发 "Release" 工作流，输入版本号
+2. **自动发布**：推送以 `v` 开头的标签（如 `v0.0.39`）会自动触发构建和发布到 PyPI
+3. **创建 Release**：在 GitHub 上创建 Release 也会触发自动发布
+
+### GitHub Actions 工作流
+
+- **CI** (`.github/workflows/ci.yml`)：每次推送和 PR 时运行，测试多个 Python 版本和平台的构建，包含代码质量检查
+- **Publish** (`.github/workflows/publish.yml`)：标签推送或创建 Release 时自动构建和发布到 PyPI
+- **Release** (`.github/workflows/release.yml`)：手动触发的版本发布工作流，自动更新版本号并创建标签
+- **Code Quality** (`.github/workflows/code-quality.yml`)：定期运行代码格式化检查，自动创建 PR 修复格式问题
+
+### 项目结构
+
+- `pyproject.toml`：现代 Python 项目配置（替代大部分 setup.py 功能）
+- `setup.py`：用于 Cython 扩展编译的最小配置
+- `.github/workflows/`：GitHub Actions CI/CD 工作流
+- `MtxDrawer/`：主要源代码
+- `MatGen/`：Cython 扩展源代码
+
+### 依赖项
+
+- **构建依赖**：`setuptools`, `Cython`, `numpy`, `wheel`
+- **运行时依赖**：`numpy`, `matplotlib`, `Qpro`, `cython`
+- **开发依赖**：`build`, `twine`, `pytest`, `black`, `isort`, `flake8`

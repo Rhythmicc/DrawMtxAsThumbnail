@@ -1,0 +1,38 @@
+# IDE and editors
+**/.vscode
+.idea
+.vscode/
+.flake8
+
+# Build artifacts
+**/build
+**/dist
+*.egg-info/
+MtxDrawer.egg-info
+
+# Python
+**/__pycache__
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv
+venv/
+.env
+
+# macOS
+**/.DS_Store
+.DS_Store
+
+# Project specific
+**/results
+**/complete
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# UV
+.uv/

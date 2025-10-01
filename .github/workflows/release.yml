@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 0.0.39)'
+        required: true
+        type: string
+      prerelease:
+        description: 'Is this a prerelease?'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Configure Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+    - name: Update version in pyproject.toml
+      run: |
+        sed -i 's/version = "[^"]*"/version = "${{ inputs.version }}"/' pyproject.toml
+        
+    - name: Commit version update
+      run: |
+        git add pyproject.toml
+        git commit -m "Bump version to ${{ inputs.version }}"
+        git push origin main
+        
+    - name: Create and push tag
+      run: |
+        git tag -a "v${{ inputs.version }}" -m "Release ${{ inputs.version }}"
+        git push origin "v${{ inputs.version }}"
+        
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ inputs.version }}
+        release_name: Release ${{ inputs.version }}
+        body: |
+          ## Changes in ${{ inputs.version }}
+          
+          - Automated release created via GitHub Actions
+          
+          ## Installation
+          
+          ```bash
+          pip install MtxDrawer==${{ inputs.version }}
+          ```
+          
+          ## Full Changelog
+          
+          See the [commits](https://github.com/${{ github.repository }}/commits/v${{ inputs.version }}) for detailed changes.
+        draft: false
+        prerelease: ${{ inputs.prerelease }}

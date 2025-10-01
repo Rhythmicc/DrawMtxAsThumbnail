@@ -1,0 +1,63 @@
+name: Code Quality
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # Run weekly on Sunday
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      
+    - name: Install formatting tools
+      run: |
+        uv pip install --system black isort
+        
+    - name: Format code with black
+      run: |
+        black .
+        
+    - name: Sort imports with isort
+      run: |
+        isort .
+        
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+        
+    - name: Create Pull Request
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        commit-message: "Auto-format code with black and isort"
+        title: "🤖 Auto-format code"
+        body: |
+          This PR was automatically created to format the code using:
+          - `black` for code formatting
+          - `isort` for import sorting
+          
+          Please review the changes and merge if they look good.
+        branch: auto-format-code
+        delete-branch: true

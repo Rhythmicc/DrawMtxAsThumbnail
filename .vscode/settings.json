@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.cu": "cpp",
-        "*.vt": "verilog",
-        "stdio.h": "c"
-    }
-}
