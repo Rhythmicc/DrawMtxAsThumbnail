@@ -342,12 +342,15 @@ class Drawer:
         plt.subplots_adjust(left=0.00, wspace=0.0)
 
         if not self.show_in_console:
-            fig.savefig(
-                self.img_path.format(suffix),
-                format=self.img_format,
-                bbox_inches='tight',  # 确保边界紧凑
-                dpi=300,
-            )
+            try:
+                fig.savefig(
+                    self.img_path.format(suffix),
+                    format=self.img_format,
+                    bbox_inches='tight',  # 确保边界紧凑
+                    dpi=300,
+                )
+            except Exception as e:
+                print(f"An error occurred when calling fig.savefig(): {e}", file=sys.stderr)
         else:
             requirePackage(
                 "QuickStart_Rhy.ImageTools.ImagePreview",
