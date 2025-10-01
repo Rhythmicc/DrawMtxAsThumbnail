@@ -160,32 +160,3 @@ isort .
 # 代码检查（推荐在提交前运行）
 flake8 .
 ```
-
-### 发布流程
-
-项目使用 GitHub Actions 进行自动化构建和发布：
-
-1. **手动发布**：在 GitHub Actions 页面手动触发 "Release" 工作流，输入版本号
-2. **自动发布**：推送以 `v` 开头的标签（如 `v0.0.39`）会自动触发构建和发布到 PyPI
-3. **创建 Release**：在 GitHub 上创建 Release 也会触发自动发布
-
-### GitHub Actions 工作流
-
-- **Publish** (`.github/workflows/publish.yml`)：标签推送或创建 Release 时自动构建多平台包并发布到 PyPI
-- **Release** (`.github/workflows/release.yml`)：手动触发的版本发布工作流，自动更新版本号并创建标签
-
-> **注意**：代码测试和质量检查在本地进行，GitHub Actions 专注于打包和发布功能。
-
-### 项目结构
-
-- `pyproject.toml`：现代 Python 项目配置（替代大部分 setup.py 功能）
-- `setup.py`：用于 Cython 扩展编译的最小配置
-- `.github/workflows/`：GitHub Actions CI/CD 工作流
-- `MtxDrawer/`：主要源代码
-- `MatGen/`：Cython 扩展源代码
-
-### 依赖项
-
-- **构建依赖**：`setuptools`, `Cython`, `numpy`, `wheel`
-- **运行时依赖**：`numpy`, `matplotlib`, `Qpro`, `cython`
-- **开发依赖**：`build`, `twine`, `pytest`, `black`, `isort`, `flake8`
