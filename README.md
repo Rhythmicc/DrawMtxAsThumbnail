@@ -10,16 +10,30 @@
 
 ## 安装
 
+推荐使用 `uv` 安装命令行工具：
+
 ```shell
-pip3 install MtxDrawer -U
+uv tool install MtxDrawer
 ```
 
-安装预览版，支持并行画图:
+更新到最新版本：
 
 ```shell
-pip3 install git+https://github.com/Rhythmicc/DrawMtxAsThumbnail.git
+uv tool install MtxDrawer --force --refresh
+```
+
+安装 GitHub 预览版：
+
+```shell
+uv tool install git+https://github.com/Rhythmicc/DrawMtxAsThumbnail.git
 # 可以添加parallel标志来启用并行画图
 # mtx-drawer draw --parallel 
+```
+
+如果更习惯 `pip`，也可以继续使用：
+
+```shell
+pip3 install -U MtxDrawer
 ```
 
 安装后可以使用命令`mtx-drawer`
@@ -143,8 +157,7 @@ uv pip install -e ".[dev]"
 uv pip install -e .
 
 # 构建包
-uv pip install build cython numpy
-python -m build
+uv build
 
 # 运行测试（本地测试）
 python -c "import MtxDrawer; print('Import test passed')"
