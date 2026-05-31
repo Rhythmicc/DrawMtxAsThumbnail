@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -176,6 +177,7 @@ static int mm_read_mtx_crd(char *fname, int *M, int *N, int *nz, int **II, int *
                            double **val, MM_typecode *matcode)
 {
     int ret_code;
+    unsigned long long rows, cols, nonzeros;
     FILE *f;
 
     if (strcmp(fname, "stdin") == 0)
@@ -190,8 +192,14 @@ static int mm_read_mtx_crd(char *fname, int *M, int *N, int *nz, int **II, int *
           mm_is_matrix(*matcode)))
         return MM_UNSUPPORTED_TYPE;
 
-    if ((ret_code = mm_read_mtx_crd_size(f, M, N, nz)) != 0)
+    if ((ret_code = mm_read_mtx_crd_size(f, &rows, &cols, &nonzeros)) != 0)
         return ret_code;
+    if (rows > INT_MAX || cols > INT_MAX || nonzeros > INT_MAX)
+        return MM_UNSUPPORTED_TYPE;
+
+    *M = (int)rows;
+    *N = (int)cols;
+    *nz = (int)nonzeros;
 
     *II = (int *)malloc(*nz * sizeof(int));
     *JJ = (int *)malloc(*nz * sizeof(int));
@@ -319,13 +327,13 @@ static int mm_read_mtx_crd_size(FILE *f, unsigned long long *M, unsigned long lo
     } while (line[0] == '%');
 
     /* line[] is either blank or has M,N, nz */
-    if (sscanf(line, "%lli %lli %lli", M, N, nz) == 3)
+    if (sscanf(line, "%llu %llu %llu", M, N, nz) == 3)
         return 0;
 
     else
         do
         {
-            num_items_read = fscanf(f, "%lli %lli %lli", M, N, nz);
+            num_items_read = fscanf(f, "%llu %llu %llu", M, N, nz);
             if (num_items_read == EOF)
                 return MM_PREMATURE_EOF;
         } while (num_items_read != 3);
@@ -510,6 +518,7 @@ static int mm_read_unsymmetric_sparse(const char *fname, int *M_, int *N_, int *
 {
     FILE *f;
     MM_typecode matcode;
+    unsigned long long rows, cols, nonzeros;
     int M, N, nz;
     int i;
     double *val;
@@ -535,11 +544,20 @@ static int mm_read_unsymmetric_sparse(const char *fname, int *M_, int *N_, int *
 
     /* find out size of sparse matrix: M, N, nz .... */
 
-    if (mm_read_mtx_crd_size(f, &M, &N, &nz) != 0)
+    if (mm_read_mtx_crd_size(f, &rows, &cols, &nonzeros) != 0)
     {
         fprintf(stderr, "read_unsymmetric_sparse(): could not parse matrix size.\n");
         return -1;
     }
+    if (rows > INT_MAX || cols > INT_MAX || nonzeros > INT_MAX)
+    {
+        fprintf(stderr, "read_unsymmetric_sparse(): matrix size exceeds int range.\n");
+        return -1;
+    }
+
+    M = (int)rows;
+    N = (int)cols;
+    nz = (int)nonzeros;
 
     *M_ = M;
     *N_ = N;
@@ -734,13 +752,13 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, unsigned
         if (fgets(line, sizeof(line), fp) != NULL)
         {   
             if (isPattern) {
-                sscanf(line, "%lli%lli", &ia, &ja);
+                sscanf(line, "%llu%llu", &ia, &ja);
                 val = 1;
             }
             else if (isReal || isInteger)
-                sscanf(line, "%lli%lli%lg", &ia, &ja, &val);
+                sscanf(line, "%llu%llu%lg", &ia, &ja, &val);
             else if (isComplex)
-                sscanf(line, "%lli%lli%lg%lg", &ia, &ja, &val, &val_im);
+                sscanf(line, "%llu%llu%lg%lg", &ia, &ja, &val, &val_im);
             
             if (is_one_based && (ia == 0 || ja == 0))
                 is_one_based = 0;

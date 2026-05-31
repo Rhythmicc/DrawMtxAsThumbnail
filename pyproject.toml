@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools-scm>=8", "Cython", "numpy", "wheel"]
+requires = ["setuptools>=64", "Cython", "numpy", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "MtxDrawer"
-version = "0.0.40"
+version = "0.0.41"
 description = "Draw Mtx As Thumbnail"
 readme = "README.md"
 license = "MIT"
@@ -42,9 +42,6 @@ dev = [
 
 [tool.setuptools.packages.find]
 include = ["MtxDrawer*"]
-
-[tool.setuptools.package-data]
-MtxDrawer = ["*.so", "*.pyd"]
 
 [tool.black]
 line-length = 88

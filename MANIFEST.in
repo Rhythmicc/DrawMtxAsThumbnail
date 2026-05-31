@@ -1,1 +1,2 @@
 include MatGen/MatGen.pyx
+include MatGen/_MatGen.c
