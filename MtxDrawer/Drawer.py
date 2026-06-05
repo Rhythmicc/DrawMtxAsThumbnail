@@ -225,7 +225,7 @@ class Drawer:
         if not self.parallel:
             status.update("生成画布")
         if self.has_aver:
-            # 空块保持为0, aver中通过where避免除零
+            # 空块保持为 0，aver 中通过 where 避免除零
             self.div = np.zeros((self.row_size, self.col_size), dtype=float)
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
@@ -369,7 +369,7 @@ def aver(mat, div):
 @Drawer.algorithmWrapper()
 def count(mat, div):
     mat[:, :] = div
-    return max(1, np.max(mat))
+    return max(1, np.max(mat) if mat.size else 0)
 
 
 @Drawer.algorithmWrapper()
