@@ -225,7 +225,7 @@ class Drawer:
         if not self.parallel:
             status.update("生成画布")
         if self.has_aver:
-            # 空块保持为 0，平均算法中通过 where 避免除零
+            # 空块计数应为 0，平均算法中通过 where 避免除零
             self.div = np.zeros((self.row_size, self.col_size), dtype=float)
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
