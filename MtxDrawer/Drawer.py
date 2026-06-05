@@ -370,7 +370,7 @@ def aver(mat, div):
 def count(mat, div):
     mat[:, :] = div
     max_count = np.max(mat) if mat.size else 0
-    # 返回值仅用于颜色范围，空矩阵仍保持像素值为 0
+    # max_count 为 0 时返回 1 仅用于避免颜色范围退化，不会修改像素值
     return max_count if max_count > 0 else 1
 
 
