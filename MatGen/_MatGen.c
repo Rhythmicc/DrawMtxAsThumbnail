@@ -793,14 +793,6 @@ static ThumbnailMatrix mat_gen_impl(const char *filepath, int block_sz, unsigned
         }
     }
 
-    if (using_div) {
-        for (int i = 0; i < res.trows * res.tcols; ++i)
-        {
-            if (div_mat[i] == 0)
-                div_mat[i] = 1;
-        }
-    }
-
     fclose(fp);
     munmap(file_data, sb.st_size);
     close(fd);

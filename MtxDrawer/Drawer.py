@@ -225,11 +225,10 @@ class Drawer:
         if not self.parallel:
             status.update("生成画布")
         if self.has_aver:
-            self.div = np.ones((self.row_size, self.col_size), dtype=float)
+            self.div = np.zeros((self.row_size, self.col_size), dtype=float)
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
                 self.div[i[1:]] += 1
-            self.div[self.div > 1] -= 1
         else:
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
@@ -362,8 +361,14 @@ class Drawer:
 
 @Drawer.algorithmWrapper()
 def aver(mat, div):
-    mat /= div
+    np.divide(mat, div, out=mat, where=div != 0)
     return max(abs(max([max(i) for i in mat])), abs(min([min(i) for i in mat])))
+
+
+@Drawer.algorithmWrapper()
+def count(mat, div):
+    mat[:, :] = div
+    return max(1, np.max(mat))
 
 
 @Drawer.algorithmWrapper()

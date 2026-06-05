@@ -56,13 +56,13 @@ pip3 install -U MtxDrawer
    ```
 
 6. `<filepath>`: mtx 文件的路径 (`draw-one`子命令中必填)
-7. `<-ops <aver | abs | real | log | ... >>`: 缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换
+7. `<-ops <aver | abs | real | log | count | ... >>`: 缩略图的类型，其中`<aver>`表示平均值，`<abs>`表示绝对值，`<real>`表示实际值，`<log>`表示对数值进行对数变换，`<count>`表示每个像素点对应块里的元素数量
 
 ## 运行例子
 
 ```shell
-mtx-drawer draw-one 2.mtx --force --log-times 0 -ops aver abs log real # 一次性绘制2.mtx的四种图，log取0次，强制替换
-mtx-drawer draw-one 2.mtx  -ops aver abs log real # 一次性绘制2.mtx的四种图，log取2次，不强制替换
+mtx-drawer draw-one 2.mtx --force --log-times 0 -ops aver abs log real count # 一次性绘制2.mtx的五种图，log取0次，强制替换
+mtx-drawer draw-one 2.mtx  -ops aver abs log real count # 一次性绘制2.mtx的五种图，log取2次，不强制替换
 mtx-drawer draw --force -ops aver abs log # 绘制当前目录及子目录下的全部mtx文件的三种图，强制替换
 mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全部mtx文件的三种图，不强制替换且log取2次
 ```

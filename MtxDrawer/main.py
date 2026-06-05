@@ -17,7 +17,7 @@ def draw_one():
 
 @app.custom_complete("ops")
 def draw_one():
-    return ['abs', 'log', 'aver', 'real']
+    return ['abs', 'log', 'aver', 'real', 'count']
 
 @app.custom_complete("color_theme")
 def draw_one():
@@ -33,7 +33,7 @@ def draw():
 
 @app.custom_complete('ops')
 def draw():
-    return ['abs', 'log', 'aver', 'real']
+    return ['abs', 'log', 'aver', 'real', 'count']
 
 @app.custom_complete('color_theme')
 def draw():
@@ -72,7 +72,7 @@ def draw_one(
     try:
         drawer = Drawer(
             filepath,
-            "aver" in ops,
+            "aver" in ops or "count" in ops,
             force,
             log_times,
             set_mat_size=mat_size,
@@ -116,7 +116,7 @@ def draw(
     :return:
     """
     if not parallel:
-        has_aver = "aver" in ops
+        has_aver = "aver" in ops or "count" in ops
         status("遍历并处理").start()
         for rt, _, sonFiles in os.walk(rt_path, followlinks=True):
             for file in sonFiles:
@@ -158,7 +158,7 @@ def draw(
             try:
                 drawer = Drawer(
                     file,
-                    "aver" in ops,
+                    "aver" in ops or "count" in ops,
                     force,
                     log_times,
                     set_mat_size=mat_size,
