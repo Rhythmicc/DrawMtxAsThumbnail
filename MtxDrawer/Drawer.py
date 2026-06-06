@@ -225,11 +225,11 @@ class Drawer:
         if not self.parallel:
             status.update("生成画布")
         if self.has_aver:
-            self.div = np.ones((self.row_size, self.col_size), dtype=float)
+            # 空块计数应为 0，平均算法中通过 where 避免除零
+            self.div = np.zeros((self.row_size, self.col_size), dtype=float)
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
                 self.div[i[1:]] += 1
-            self.div[self.div > 1] -= 1
         else:
             for i in zip(self.coo_data, self.coo_rows, self.coo_cols):
                 self.raw_mat[i[1:]] += i[0]
@@ -362,8 +362,16 @@ class Drawer:
 
 @Drawer.algorithmWrapper()
 def aver(mat, div):
-    mat /= div
+    np.divide(mat, div, out=mat, where=div != 0)
     return max(abs(max([max(i) for i in mat])), abs(min([min(i) for i in mat])))
+
+
+@Drawer.algorithmWrapper()
+def count(mat, div):
+    mat[:, :] = div
+    max_count = np.max(mat) if mat.size else 0
+    # max_count 为 0 时返回 1 仅用于避免颜色范围退化，不会修改像素值
+    return max_count if max_count > 0 else 1
 
 
 @Drawer.algorithmWrapper()
