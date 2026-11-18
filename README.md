@@ -73,7 +73,7 @@ mtx-drawer draw -ops aver abs log real # 绘制当前目录及子目录下的全
 
 ### 命令行补全
 
-基于[QuickProject.Commmander](https://github.com/Rhythmicc/QuickProject)开发的命令行 APP 可以提供 zsh 或 [fig](https://fig.io/) 的补全脚本：
+基于 [Veyo (Commander)](https://github.com/Rhythmicc/QuickProject) 开发的命令行 APP 可以提供 zsh 的补全脚本：
 
 ```sh
 mtx-drawer complete

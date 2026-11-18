@@ -1,18 +1,22 @@
-from QuickProject import QproDefaultConsole as console
-from QuickProject import QproInfoString as info_string
-from QuickProject import QproWarnString as warn_string
-from QuickProject import QproErrorString as erro_string
-from QuickProject import QproDefaultStatus as status
-from QuickProject import _ask, user_lang, external_exec, user_pip
+from veyo import (
+    console,
+    info_str as info_string,
+    warn_str as warn_string,
+    err_str as erro_string,
+    status,
+    ask as _ask,
+    user_lang,
+    external_exec,
+)
 from decimal import getcontext, Decimal, ROUND_HALF_EVEN
 import sys
 
-name = 'MtxDrawer'
+name = "MtxDrawer"
 getcontext().rounding = ROUND_HALF_EVEN
 
 
 def my_round(x: float) -> int:
-    return int(Decimal(x).quantize(Decimal('1')))
+    return int(Decimal(x).quantize(Decimal("1")))
 
 
 def requirePackage(
@@ -21,7 +25,7 @@ def requirePackage(
     real_name: str = "",
     not_exit: bool = True,
     not_ask: bool = False,
-    set_pip: str = user_pip,
+    set_pip: str = f'"{sys.executable}" -m pip',
 ):
     """
     获取本机上的python第三方库，如没有则询问安装
@@ -36,7 +40,11 @@ def requirePackage(
     """
     local_scope = {}
     try:
-        exec((f"from {pname} import {module}" if module else f"import {pname}"), globals(), local_scope)
+        exec(
+            (f"from {pname} import {module}" if module else f"import {pname}"),
+            globals(),
+            local_scope,
+        )
     except (ModuleNotFoundError, ImportError):
         if not_ask:
             return None
@@ -54,7 +62,11 @@ def requirePackage(
                     True,
                 )
             if not_exit:
-                exec((f"from {pname} import {module}" if module else f"import {pname}"), globals(), local_scope)
+                exec(
+                    (f"from {pname} import {module}" if module else f"import {pname}"),
+                    globals(),
+                    local_scope,
+                )
             else:
                 console.print(
                     info_string,
@@ -65,5 +77,4 @@ def requirePackage(
                 exit(0)
         else:
             exit(-1)
-    finally:
-        return local_scope.get(module if module else pname)
+    return local_scope.get(module if module else pname)

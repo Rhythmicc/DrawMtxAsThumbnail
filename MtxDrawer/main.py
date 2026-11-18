@@ -1,4 +1,4 @@
-from QuickProject.Commander import Commander
+from veyo import Commander
 from . import console, info_string, status
 from .Drawer import Drawer
 import os
@@ -195,10 +195,11 @@ def update():
     """
     更新
     """
-    from QuickProject import user_pip, external_exec
+    import sys
+    from veyo import external_exec
 
     with status("正在更新..."):
-        external_exec(f"{user_pip} install -U MtxDrawer")
+        external_exec(f'"{sys.executable}" -m pip install -U MtxDrawer')
     console.print(info_string, "更新完成")
 
 

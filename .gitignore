@@ -36,3 +36,6 @@ venv/
 
 # UV
 .uv/
+
+# Local helper scripts
+scripts/
